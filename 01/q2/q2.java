@@ -21,6 +21,7 @@ import java.lang.System.*;
 public class q2 {
 
     static final int numStartingNodes = 15; // number of nodes in initial tree
+    static final long fiveSecondsInMillis = 5000; // number of milliseconds in 5 seconds
 
     static TreeNode root;
 
@@ -54,7 +55,7 @@ public class q2 {
         }
     }
 
-    // for debugging. inorder tree print
+    // for debugging. "pretty-print" tree.
     static void treePrint(TreeNode tn, int n, boolean left) {
         if (tn == null)
             return;
@@ -87,7 +88,6 @@ public class q2 {
                 StringBuilder str = new StringBuilder();
                 @Override
                 public void run() { // repeatedly traverse the tree for 5 seconds
-                    long fiveSecondsInMillis = 5000;
                     long startTime = System.currentTimeMillis();
 
                     int down = 0;
@@ -95,9 +95,11 @@ public class q2 {
                     int upFromRight = 2;
 
                     int direction = down;
-                    boolean timesUp = false;
                     TreeNode curr = root;
-                    while (!timesUp) {
+                    while (System.currentTimeMillis() - startTime < fiveSecondsInMillis) {
+                        try { Thread.sleep((long) randomDouble(5, 20)); }
+                        catch(Exception e) { e.printStackTrace(); }
+
                         if (direction == down) {
                             if (curr.leftChild != null) {
                                 curr = curr.leftChild;
@@ -126,15 +128,6 @@ public class q2 {
                             }
                             curr = curr.parent;
                         }
-
-                        try {
-                            Thread.sleep((long) randomDouble(5, 20));
-                        } catch(Exception e){
-                            e.printStackTrace();
-                        }
-
-                        if (System.currentTimeMillis() - startTime > fiveSecondsInMillis)
-                            timesUp = true;
                     }
                 }
             }
@@ -144,7 +137,23 @@ public class q2 {
                 ts[i].start();
 
             // do tree modification
-            // TODO
+            long startTime = System.currentTimeMillis();
+            boolean timesUp = false;
+            TreeNode curr = root;
+            while (!timesUp) {
+                try { Thread.sleep((long) randomDouble(1,5)); }
+                catch(Exception e){ e.printStackTrace(); }
+
+                if (randomDouble() < 0.5) { // check leftChild first
+                    if (curr.leftChild != null) {
+                        if (randomDouble() < 0.1) {
+                        }
+                    } else {
+                        if (randomDouble() < 0.4) {
+                        }
+                    }
+                }
+            }
 
             for (int i = 0; i < ts.length; i++)
                 ts[i].join();
