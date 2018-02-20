@@ -21,7 +21,7 @@ import java.lang.System.*;
 public class q2 {
 
     static final int numStartingNodes = 15; // number of nodes in initial tree
-    static final long fiveSecondsInMillis = 500; // number of milliseconds in 5 seconds
+    static final long fiveSecondsInMillis = 5000; // number of milliseconds in 5 seconds
 
     static volatile TreeNode root;
 
@@ -81,8 +81,8 @@ public class q2 {
             for (int i = 0; i < numStartingNodes; i++)
                 treeInsert(root, randomDouble());
 
-            treePrint(root, 0, true);
-            System.out.println("----------------------------------------");
+            //treePrint(root, 0, true);
+            //System.out.println("----------------------------------------");
 
             // thread that does inorder tree traversal recording path as string
             class TreePrinter extends Thread {
@@ -92,39 +92,66 @@ public class q2 {
 
                 @Override
                 public void run() { // repeatedly traverse the tree for 5 seconds
-                    int down = 0;
-                    int upFromLeft = 1;
-                    int upFromRight = 2;
-
                     TreeNode curr = root;
-                    int direction = down;
+                    TreeNode prev = curr.parent;
+
+                    TreeNode parent = null;
+                    TreeNode leftChild = null;
+                    TreeNode rightChild = null;
+
                     long startTime = System.currentTimeMillis();
                     while (System.currentTimeMillis() - startTime < fiveSecondsInMillis) {
-                        if (direction == down) {
-                            if (curr.leftChild != null) {
-                                curr = curr.leftChild;
+                        // restart after finishing traversal
+                        if (curr == null) {
+                            curr = root;
+                            prev = curr.parent;
+                            str.append("\n");
+                        }
+
+                        // get all references just once
+                        parent = curr.parent;
+                        leftChild = curr.leftChild;
+                        rightChild = curr.rightChild;
+
+                        if (prev == parent) {
+                            prev = curr;
+                            if (leftChild != null) {
+                                curr = leftChild;
                             } else {
-                                direction = upFromLeft;
+                                str.append(curr.data +  " ");
+                                if (rightChild != null) {
+                                    curr = rightChild;
+                                } else {
+                                    curr = parent;
+                                }
                             }
-                        } else if (direction == upFromLeft) {
+                        } else if (prev == leftChild) {
+                            prev = curr;
                             str.append(curr.data + " ");
-                            if (curr.rightChild != null) {
-                                curr = curr.rightChild;
-                                direction = down;
+                            if (rightChild != null) {
+                                curr = rightChild;
                             } else {
-                                direction = upFromRight;
+                                curr = parent;
                             }
-                        } else if (direction == upFromRight) {
-                            if (curr == root) {
-                                direction = down;
-                                str.append("\n");
-                                System.out.println("traversal complete " + id);
-                            } else if (curr == curr.parent.leftChild) {
-                                direction = upFromLeft;
-                                curr = curr.parent;
-                            } else if (curr == curr.parent.rightChild) {
-                                direction = upFromRight;
-                                curr = curr.parent;
+                        } else if (prev == rightChild) {
+                            prev = curr;
+                            curr = parent;
+                        } else { // if prev is one of children but they've both been set to null
+                            prev = curr;
+                            if (leftChild != null) { // prev should be rightChild but rightChild is null
+                                curr = parent;
+                            } else if (rightChild != null) { // prev should be leftChild but leftChild is null
+                                str.append(curr.data + " ");
+                                curr = rightChild;
+                            } else { // both children are null so can't tell which child prev is
+                                String[] currTraversal = str.substring(str.lastIndexOf("\n")+1).split(" ");
+                                boolean alreadyVisited = false;
+                                for (String s : currTraversal)
+                                    if (s.equals(String.valueOf(curr.data)))
+                                        alreadyVisited = true;
+                                if (!alreadyVisited)
+                                    str.append(curr.data + " ");
+                                curr = parent;
                             }
                         }
 
@@ -134,16 +161,16 @@ public class q2 {
                 }
             }
 
-            TreePrinter[] ts = new TreePrinter[] { new TreePrinter(1)/*, new TreePrinter(2)*/ };
+            TreePrinter[] ts = new TreePrinter[] { new TreePrinter(1), new TreePrinter(2) };
             for (TreePrinter t : ts)
-                t.start()
-                ;
+                t.start();
 
             // do tree modification
             long startTime = System.currentTimeMillis();
+            double minVal = 0.; double maxVal = 1.;
             TreeNode curr = root;
             while (System.currentTimeMillis() - startTime < fiveSecondsInMillis) {
-                treePrint(root, 0, true);
+                //treePrint(root, 0, true);
 
                 boolean madeModification = false;
                 boolean rightChildIsNull = false;
@@ -151,15 +178,15 @@ public class q2 {
 
                 if (curr.leftChild != null) {
                     if (randomDouble() < 0.1) {
-                        System.out.println("delete left child");
+                        //System.out.println("delete left child");
                         curr.leftChild = null;
                         madeModification = true;
                     }
                 } else {
                     leftChildIsNull = true;
                     if (randomDouble() < 0.4) {
-                        System.out.println("create left child");
-                        TreeNode aLeftChild = new TreeNode(randomDouble(), curr, null, null);
+                        //System.out.println("create left child");
+                        TreeNode aLeftChild = new TreeNode(randomDouble(minVal, curr.data), curr, null, null);
                         curr.leftChild = aLeftChild;
                         madeModification = true;
                     }
@@ -167,30 +194,40 @@ public class q2 {
 
                 if (curr.rightChild != null) {
                     if (randomDouble() < 0.1) {
-                        System.out.println("delete right child");
+                        //System.out.println("delete right child");
                         curr.rightChild = null;
                         madeModification = true;
                     }
                 } else {
                     rightChildIsNull = true;
                     if (randomDouble() < 0.4) {
-                        System.out.println("create right child");
-                        TreeNode aRightChild = new TreeNode(randomDouble(), curr, null, null);
+                        //System.out.println("create right child");
+                        TreeNode aRightChild = new TreeNode(randomDouble(curr.data, maxVal), curr, null, null);
                         curr.rightChild = aRightChild;
                         madeModification = true;
                     }
                 }
 
                 if (madeModification || (rightChildIsNull && leftChildIsNull)) {
+                    minVal = 0.; maxVal = 1.;
                     curr = root;
                     try { Thread.sleep((long) randomDouble(5,20)); }
                     catch(Exception e){ e.printStackTrace(); }
                 } else {
+                    TreeNode tmp = curr;
                     if (!leftChildIsNull && !rightChildIsNull) {
-                        curr = randomDouble() < 0.5 ? curr.leftChild : curr.rightChild;
+                        if (randomDouble() < 0.5) {
+                            maxVal = curr.data;
+                            curr = curr.leftChild;
+                        } else {
+                            minVal = curr.data;
+                            curr = curr.rightChild;
+                        }
                     } else if (!leftChildIsNull) {
+                        maxVal = curr.data;
                         curr = curr.leftChild;
                     } else if (!rightChildIsNull){
+                        minVal = curr.data;
                         curr = curr.rightChild;
                     }
                 }
