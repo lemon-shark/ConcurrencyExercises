@@ -38,7 +38,7 @@ public class q2 {
     static double randomDouble(double lowerBoundInclusive, double upperBoundExclusive)
     { return ThreadLocalRandom.current().nextDouble(lowerBoundInclusive, upperBoundExclusive); }
 
-    // insert into Binary Search Tree to initizialize it with random doubles
+    // insert into Binary Search Tree to initizialize it with random doubles. just for tree initialization
     static void treeInsert(TreeNode tn, double data) {
         if (data <= tn.data) {
             if (tn.leftChild == null) {
@@ -81,9 +81,6 @@ public class q2 {
             for (int i = 0; i < numStartingNodes; i++)
                 treeInsert(root, randomDouble());
 
-            //treePrint(root, 0, true);
-            //System.out.println("----------------------------------------");
-
             // thread that does inorder tree traversal recording path as string
             class TreePrinter extends Thread {
                 StringBuilder str = new StringBuilder();
@@ -101,14 +98,12 @@ public class q2 {
 
                     long startTime = System.currentTimeMillis();
                     while (System.currentTimeMillis() - startTime < fiveSecondsInMillis) {
-                        // restart after finishing traversal
-                        if (curr == null) {
+                        if (curr == null) { // restart traversal
                             curr = root;
                             prev = curr.parent;
                             str.append("\n");
                         }
 
-                        // get all references just once
                         parent = curr.parent;
                         leftChild = curr.leftChild;
                         rightChild = curr.rightChild;
@@ -125,7 +120,7 @@ public class q2 {
                                     curr = parent;
                                 }
                             }
-                        } else if (prev == leftChild) {
+                        } else if (prev == leftChild || prev.data < curr.data) {
                             prev = curr;
                             str.append(curr.data + " ");
                             if (rightChild != null) {
@@ -133,26 +128,9 @@ public class q2 {
                             } else {
                                 curr = parent;
                             }
-                        } else if (prev == rightChild) {
+                        } else if (prev == rightChild || prev.data > curr.data) {
                             prev = curr;
                             curr = parent;
-                        } else { // if prev is one of children but they've both been set to null
-                            prev = curr;
-                            if (leftChild != null) { // prev should be rightChild but rightChild is null
-                                curr = parent;
-                            } else if (rightChild != null) { // prev should be leftChild but leftChild is null
-                                str.append(curr.data + " ");
-                                curr = rightChild;
-                            } else { // both children are null so can't tell which child prev is
-                                String[] currTraversal = str.substring(str.lastIndexOf("\n")+1).split(" ");
-                                boolean alreadyVisited = false;
-                                for (String s : currTraversal)
-                                    if (s.equals(String.valueOf(curr.data)))
-                                        alreadyVisited = true;
-                                if (!alreadyVisited)
-                                    str.append(curr.data + " ");
-                                curr = parent;
-                            }
                         }
 
                         try { Thread.sleep((long) randomDouble(1, 5)); }
@@ -170,7 +148,6 @@ public class q2 {
             double minVal = 0.; double maxVal = 1.;
             TreeNode curr = root;
             while (System.currentTimeMillis() - startTime < fiveSecondsInMillis) {
-                //treePrint(root, 0, true);
 
                 boolean madeModification = false;
                 boolean rightChildIsNull = false;
@@ -178,14 +155,12 @@ public class q2 {
 
                 if (curr.leftChild != null) {
                     if (randomDouble() < 0.1) {
-                        //System.out.println("delete left child");
                         curr.leftChild = null;
                         madeModification = true;
                     }
                 } else {
                     leftChildIsNull = true;
                     if (randomDouble() < 0.4) {
-                        //System.out.println("create left child");
                         TreeNode aLeftChild = new TreeNode(randomDouble(minVal, curr.data), curr, null, null);
                         curr.leftChild = aLeftChild;
                         madeModification = true;
@@ -194,14 +169,12 @@ public class q2 {
 
                 if (curr.rightChild != null) {
                     if (randomDouble() < 0.1) {
-                        //System.out.println("delete right child");
                         curr.rightChild = null;
                         madeModification = true;
                     }
                 } else {
                     rightChildIsNull = true;
                     if (randomDouble() < 0.4) {
-                        //System.out.println("create right child");
                         TreeNode aRightChild = new TreeNode(randomDouble(curr.data, maxVal), curr, null, null);
                         curr.rightChild = aRightChild;
                         madeModification = true;
