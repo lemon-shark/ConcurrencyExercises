@@ -5,9 +5,12 @@ import javax.imageio.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Polygon;
-import java.lang.System;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import static java.lang.Math.sqrt;
 
 public class star {
     // the only constants that were useful to be static globals
@@ -19,13 +22,18 @@ public class star {
     public static int c; // how many times each thread must edit a vertex
 
     public static SynchPoint[] vertices = new SynchPoint[] {
-        new SynchPoint(-1, 5),
-        new SynchPoint(1, 2),
-        new SynchPoint(5, 0),
-        new SynchPoint(1, -2),
-        new SynchPoint(-4, -4),
-        new SynchPoint(-3, -1)
+        new SynchPoint(-1,  5, 0),
+        new SynchPoint( 1,  2, 1),
+        new SynchPoint( 5,  0, 2),
+        new SynchPoint( 1, -2, 3),
+        new SynchPoint(-4, -4, 4),
+        new SynchPoint(-3, -1, 5)
     };
+
+
+    /**
+     * main method
+     */
 
     public static void main(String[] args) throws Exception {
         // command-line arg parsing
@@ -38,8 +46,29 @@ public class star {
         if (m < 1 || c < 1)
             throw new Exception("both arguments must be positive");
 
-        // TODO: the whole program
-        // -----------------------
+        // set up linked list
+        for (int i = 0; i < vertices.length; i++) {
+            vertices[i].next = vertices[(i + 1) % vertices.length];
+            vertices[i].prev = vertices[(i + vertices.length - 1) % vertices.length];
+        }
+
+        // dispatch m threads to randomly update vertices c times each
+        Thread[] ts = new Thread[m];
+        for (int i = 0; i < m; i++) {
+            ts[i] = new Thread() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < c; j++)
+                        vertices[(int)(ThreadLocalRandom.current().nextDouble()*6)].updateCoord();
+                }
+            };
+        }
+
+        // run the m threads and wait for them to finish
+        for (Thread t : ts)
+            t.start();
+        for (Thread t : ts)
+            t.join();
 
         // create an image and initialize it to all 0's
         BufferedImage img = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
@@ -54,7 +83,7 @@ public class star {
             xCoords[i] = vertices[i].x;
             yCoords[i] = vertices[i].y;
         }
-        int[] newOrigin = rescaleCoords(xCoords, yCoords);
+        Point newOrigin = rescaleCoords(xCoords, yCoords);
 
         // draw polygon on image
         Graphics imgGraphics = img.getGraphics();
@@ -62,7 +91,7 @@ public class star {
         imgGraphics.fillPolygon(xCoords, yCoords, vertices.length);
         imgGraphics.setColor(Color.RED);
         for (int i = 0; i < vertices.length; i++)
-            imgGraphics.drawLine(newOrigin[0], newOrigin[1], xCoords[i], yCoords[i]);
+            imgGraphics.drawLine(newOrigin.x, newOrigin.y, xCoords[i], yCoords[i]);
         imgGraphics.setColor(Color.BLUE);
         for (int i = 0; i < vertices.length; i++)
             imgGraphics.fillOval(xCoords[i] - 10, yCoords[i] - 10, 20, 20);
@@ -77,10 +106,13 @@ public class star {
      * convenience functions
      */
 
-    public static int[] rescaleCoords(int[] xCoords, int[] yCoords) {
+    // rescale and translate coords to fit in 1920x1080.  return new origin
+    public static Point rescaleCoords(int[] xCoords, int[] yCoords) {
         assert(yCoords.length == vertices.length && xCoords.length == vertices.length);
 
-        // scale coordinates to fit in imgWidth,imgHeight
+        /**
+         * scale coordinates to fit in imgWidth,imgHeight
+         */
         int maxX = Integer.MIN_VALUE;
         int maxY = Integer.MIN_VALUE;
         int minX = Integer.MAX_VALUE;
@@ -110,7 +142,9 @@ public class star {
             yCoords[i] = scaledY;
         }
 
-        // translate coordinates to be in first quadrant
+        /**
+         * translate coordinates to be in first quadrant
+         */
         minX = Integer.MAX_VALUE;
         minY = Integer.MAX_VALUE;
         for (int i = 0; i < vertices.length; i++) {
@@ -127,19 +161,63 @@ public class star {
         int newOriginX = -minX;
         int newOriginY = -minY;
 
-        return new int[] {newOriginX, newOriginY};
+        return new Point(newOriginX, newOriginY);
     }
-
-
-    public static double randomDouble() // save me typing later
-    { return ThreadLocalRandom.current().nextDouble(); }
 }
 
 class SynchPoint {
     public int x;
     public int y;
-    public SynchPoint(int x, int y) {
+    public SynchPoint prev;
+    public SynchPoint next;
+    public ReentrantLock lock;
+    boolean even;
+
+    public SynchPoint(int x, int y, int id) {
         this.x = x;
         this.y = y;
+        even = (id / 2) % 2 == 0? true : false;
+        lock = new ReentrantLock();
+    }
+
+    public void lock()
+    { this.lock.lock(); }
+    public void unlock()
+    { this.lock.unlock(); }
+
+    public void updateCoord() {
+        if (even) {
+            prev.lock();
+            this.lock();
+            next.lock();
+        } else {
+            next.lock();
+            this.lock();
+            prev.lock();
+        }
+
+        double r1 = ThreadLocalRandom.current().nextDouble();
+        double r2 = ThreadLocalRandom.current().nextDouble();
+        this.x = (int) ((1 - sqrt(r1)) * prev.x + (sqrt(r1) * (1 - r2)) * this.x + (sqrt(r1) * r2) * next.x);
+        this.y = (int) ((1 - sqrt(r1)) * prev.y + (sqrt(r1) * (1 - r2)) * this.y + (sqrt(r1) * r2) * next.y);
+
+        if (even) {
+            next.unlock();
+            this.unlock();
+            prev.unlock();
+        } else {
+            prev.unlock();
+            this.unlock();
+            next.unlock();
+        }
+    }
+}
+
+// one-time-use data passing class
+class Point {
+    public int x;
+    public int y;
+    public Point(int x, int y) {
+        this.x = x; this.y = y;
     }
 }
