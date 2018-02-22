@@ -52,8 +52,8 @@ public class star {
             int prev = (i + vertices.length - 1) % vertices.length;
             int next = (i + 1) % vertices.length;
 
-            vertices[i].next = vertices[(i + 1) % vertices.length];
-            vertices[i].prev = vertices[(i + vertices.length - 1) % vertices.length];
+            vertices[i].prev = vertices[prev];
+            vertices[i].next = vertices[next];
 
             // global ordering to prevent deadlock
             int[] ordering = new int[] {prev, i, next};
