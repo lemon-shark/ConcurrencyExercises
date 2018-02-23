@@ -120,8 +120,9 @@ public class star {
         for (int i = 0; i < vertices.length; i++)
             imgGraphics.drawLine(newOrigin.x, newOrigin.y, xCoords[i], yCoords[i]);
         imgGraphics.setColor(Color.BLUE);
+        int diameter = 20;
         for (int i = 0; i < vertices.length; i++)
-            imgGraphics.fillOval(xCoords[i] - 10, yCoords[i] - 10, 20, 20);
+            imgGraphics.fillOval(xCoords[i] - diameter/2, yCoords[i] - diameter/2, diameter, diameter);
 
         // write image to file
         File outputfile = new File("output.png");
@@ -238,6 +239,7 @@ class SynchVertex {
     }
 }
 
+// data-passing class. used once
 class Vertex {
     public int x;
     public int y;
