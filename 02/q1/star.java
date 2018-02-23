@@ -34,14 +34,22 @@ public class star {
      */
     public static void main(String[] args) throws Exception {
         // command-line arg parsing
-        if (args.length != 2)
-            throw new Exception("expected 2 arguments, got "+args.length);
-        m = Integer.parseInt(args[0]);
-        if (m > vertices.length)
-            throw new Exception("polygon has 6 vertices, so max 6 threads allowed");
-        c = Integer.parseInt(args[1]);
-        if (m < 1 || c < 0)
-            throw new Exception("both arguments must be positive");
+        try {
+            if (args.length != 2)
+                throw new Exception("expected 2 arguments, got "+args.length);
+            m = Integer.parseInt(args[0]);
+            if (m > vertices.length)
+                throw new Exception("polygon has 6 vertices, so max 6 threads allowed");
+            if (m < 1)
+                throw new Exception("must run at least one thread");
+            c = Integer.parseInt(args[1]);
+            if (c < 0)
+                throw new Exception("number of vertex updates per thread must be a positive number");
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("usage: java star num_threads num_vertex_edits_per_thread");
+            System.exit(1);
+        }
 
         // set up linked list
         for (int i = 0; i < vertices.length; i++) {
