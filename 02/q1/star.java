@@ -1,16 +1,16 @@
-import java.awt.image.*;
+import java.awt.image.*; // for writing image to disk
 import java.io.*;
 import javax.imageio.*;
 
-import java.awt.Graphics;
+import java.awt.Graphics; // for drawing shapes on images
 import java.awt.Color;
 import java.awt.Polygon;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ThreadLocalRandom; // for random doubles
+import java.util.concurrent.locks.Lock; // Lock interface
+import java.util.concurrent.locks.ReentrantLock; // Lock implementation
 
-import java.util.Arrays;
+import java.util.Arrays; // general utilities
 import java.util.Comparator;
 import static java.lang.Math.sqrt;
 
@@ -25,7 +25,6 @@ public class star {
 
     // points of the polygon to be drawn after multithreaded manipulation
     public static SynchVertex[] vertices = new SynchVertex[] {
-        //            (   x,    y)
         new SynchVertex(-1.0,  5.0),
         new SynchVertex( 1.0,  2.0),
         new SynchVertex( 5.0,  0  ),
@@ -60,8 +59,8 @@ public class star {
             v.next = vertices[next];
 
             Integer[] ordering = new Integer[] {prev, i, next};
-            // becaues every triplet of SynchVertexs that are adjacent in linked list must be locked
-            // at once, create a global ordering that is internally consistent for each triplet
+            // becaues every triplet of SynchVertexes that are adjacent in linked list must be locked
+            // at once, create a global ordering that is internally consistent for each such triplet
             Arrays.sort(ordering, (a, b) -> (a % 3) - (b % 3));
 
             v.setTriangleVerticesInLockAcquisitionOrder(
