@@ -1,8 +1,8 @@
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-public class SynchronizedQueue imlements Queue {
-    private Deque<Integer> queue = new ArrayDeque<>();
+public class SynchronizedQueue implements Queue {
+    private Deque<QueueElement> queue = new ArrayDeque<>();
 
     public void enqueue(QueueElement elem) {
         synchronized(this) {
@@ -12,8 +12,9 @@ public class SynchronizedQueue imlements Queue {
     }
     public QueueElement dequeue() {
         synchronized(this) {
+            QueueElement elem = queue.removeFirst();
             elem.timeDequeued = System.currentTimeMillis();
-            queue.removeFirst();
+            return elem;
         }
     }
 }

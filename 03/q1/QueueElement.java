@@ -1,7 +1,7 @@
 public class QueueElement {
-    public int data;
+    public int uniqueId;
     public long timeEnqueued;
     public long timeDequeued;
-    public QueueElement(int data)
-    { this.data = data; }
+    public QueueElement(int uniqueId)
+    { this.uniqueId = uniqueId; }
 }
