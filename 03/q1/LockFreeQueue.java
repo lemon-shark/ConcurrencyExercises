@@ -1,16 +1,25 @@
-public class LockFreeQueue.java implements Queue {
-    AtomicReference<QueueElement> head = new AtomicReference<>(null);
-    AtomicReference<QueueElement> tail = new AtomicReference<>(null);
+import java.util.concurrent.atomic.AtomicReference;
+
+public class LockFreeQueue implements Queue {
+    QueueElement sentinel;
+    AtomicReference<QueueElement> head;
+    AtomicReference<QueueElement> tail;
+
+    public LockFreeQueue() {
+        this.sentinel = new QueueElement(-1);
+        this.head = new AtomicReference<>(sentinel);
+        this.tail = new AtomicReference<>(sentinel);
+    }
 
     public void enqueue(QueueElement elem) {
         while (true) {
-            Node last = tail.get();
-            Node nextAfterLast = last.next.get();
+            QueueElement last = tail.get();
+            QueueElement nextAfterLast = last.next.get();
             if (last == tail.get()) {
                 if (nextAfterLast == null) {
-                    if (last.next.compareAndSet(nextAfterLast, node)) {
-                        tail.compareAndSet(last, node);
-                        node.enqueueTime = System.currentTimeMillis();
+                    if (last.next.compareAndSet(nextAfterLast, elem)) {
+                        elem.timeEnqueued = System.currentTimeMillis();
+                        tail.compareAndSet(last, elem);
                         return;
                     }
                 }
@@ -24,9 +33,9 @@ public class LockFreeQueue.java implements Queue {
     public QueueElement dequeue() throws Exception {
         while (true) {
             QueueElement first = head.get();
-            QueueElement second = first.next.get();
             QueueElement last = tail.get();
-            if (fisrt == head.get()) {
+            QueueElement second = first.next.get();
+            if (first == head.get()) {
                 if (first == last) {
                     if (second == null) {
                         throw new Exception("Empty Queue");
@@ -34,10 +43,9 @@ public class LockFreeQueue.java implements Queue {
                     tail.compareAndSet(last, second);
                 }
                 else {
-                    QueueElement retval = second.get();
                     if (head.compareAndSet(first, second)) {
-                        retval.timeDequeued = System.currentTimeMillis();
-                        return retval;
+                        second.timeDequeued = System.currentTimeMillis();
+                        return second;
                     }
                 }
             }

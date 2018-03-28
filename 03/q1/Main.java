@@ -32,9 +32,6 @@ public class Main {
             throw new Exception(helpString);
         }
 
-        long startTime = 0;
-        long endTime = 0;
-
         /**
          * Run the expriment with a blocking, synchronized queue
          */
@@ -43,13 +40,16 @@ public class Main {
         EnqueueThread[] enqueueThreads = new EnqueueThread[p];
         DequeueThread[] dequeueThreads = new DequeueThread[q];
 
+        long synchStartTime = 0;
+        long synchEndTime = 0;
+
         // create the threads needed
         for (int i = 0; i < enqueueThreads.length; i++)
             enqueueThreads[i] = new EnqueueThread(synq, sharedCount);
         for (int i = 0; i < dequeueThreads.length; i++)
             dequeueThreads[i] = new DequeueThread(synq, n);
 
-        startTime = System.currentTimeMillis();
+        synchStartTime = System.currentTimeMillis();
         // start the threads
         for (EnqueueThread t : enqueueThreads)
             t.start();
@@ -59,7 +59,7 @@ public class Main {
         // wait for the dequeueThreads to finish
         for (DequeueThread t : dequeueThreads)
             t.join();
-        endTime = System.currentTimeMillis();
+        synchEndTime = System.currentTimeMillis();
         // ...and then kill the enqueueThreads
         for (EnqueueThread t : enqueueThreads)
             t.shouldContinueEnqueueing = false;
@@ -70,10 +70,51 @@ public class Main {
             allDequeuedElements.addAll(Arrays.asList(t.dequeuedElements));
 
         if (verbose) MyUtil.printAllQueueOps(allDequeuedElements);
-        System.out.println(p + "    " + q + "    " + n + "    " + (endTime - startTime));
 
         /**
-         * TODO: Run the experiment with a lock-free queue
+         * Run the experiment with a lock-free queue
          */
+        LockFreeQueue lfrq  = new LockFreeQueue();
+        sharedCount = new AtomicInteger(1);
+        enqueueThreads = new EnqueueThread[p];
+        dequeueThreads = new DequeueThread[q];
+
+        long lfStartTime = 0;
+        long lfEndTime = 0;
+
+        // create the threads needed
+        for (int i = 0; i < enqueueThreads.length; i++)
+            enqueueThreads[i] = new EnqueueThread(lfrq, sharedCount);
+        for (int i = 0; i < dequeueThreads.length; i++)
+            dequeueThreads[i] = new DequeueThread(lfrq, n);
+
+        lfStartTime = System.currentTimeMillis();
+        // start the threads
+        for (EnqueueThread t : enqueueThreads)
+            t.start();
+        for (DequeueThread t : dequeueThreads)
+            t.start();
+
+        // wait for the dequeueThreads to finish
+        for (DequeueThread t : dequeueThreads)
+            t.join();
+        lfEndTime = System.currentTimeMillis();
+        // ...and then kill the enqueueThreads
+        for (EnqueueThread t : enqueueThreads)
+            t.shouldContinueEnqueueing = false;
+
+        // collect all the dequeuedElements
+        allDequeuedElements = new ArrayList<>();
+        for (DequeueThread t : dequeueThreads)
+            allDequeuedElements.addAll(Arrays.asList(t.dequeuedElements));
+
+        if (verbose) MyUtil.printAllQueueOps(allDequeuedElements);
+
+        /**
+         * Print program parameters and total time of synchronized and lock-free queues
+         */
+        long totalSyncTime = synchEndTime - synchStartTime;
+        long totalLofrTime = lfEndTime - lfStartTime;
+        System.out.println(p + "," + q + "," + n + "," + totalSyncTime + "," + totalLofrTime);
     }
 }

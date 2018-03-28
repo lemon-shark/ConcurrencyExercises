@@ -19,6 +19,7 @@ public class MyUtil {
 
         for (MyTriplet op : ops)
             System.out.println(op);
+        System.out.println();
     }
 }
 
