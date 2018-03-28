@@ -37,7 +37,7 @@ public class Main {
         /**
          * Run the expriment with a blocking, synchronized queue
          */
-        SynchronizedQueue synq = new SynchronizedQueue();
+        Queue synq = new SynchronizedQueue();
         AtomicInteger sharedCount = new AtomicInteger(1);
         EnqueueThread[] enqueueThreads = new EnqueueThread[p];
         DequeueThread[] dequeueThreads = new DequeueThread[q];
@@ -76,7 +76,7 @@ public class Main {
         /**
          * Run the experiment with a lock-free queue
          */
-        LockFreeQueue lfrq  = new LockFreeQueue();
+        Queue lfrq  = new LockFreeQueue();
         sharedCount = new AtomicInteger(1);
         enqueueThreads = new EnqueueThread[p];
         dequeueThreads = new DequeueThread[q];
