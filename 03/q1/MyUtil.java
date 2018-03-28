@@ -4,13 +4,10 @@ import java.util.TreeMap;
 
 public class MyUtil {
     public static void printAllQueueOps(ArrayList<QueueElement> elems) {
-         String enq = "enq ";
-         String deq = "deq ";
-
          SortedMap<Long, String> ops = new TreeMap<>();
          for (QueueElement elem: elems) {
-             ops.put(elem.timeEnqueued, enq + elem.uniqueId);
-             ops.put(elem.timeDequeued, deq + elem.uniqueId);
+             ops.put(elem.timeEnqueued, "enq " + elem.uniqueId);
+             ops.put(elem.timeDequeued, "deq " + elem.uniqueId);
          }
 
          for (Long opTime : ops.keySet()) {
