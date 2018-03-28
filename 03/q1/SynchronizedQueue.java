@@ -10,8 +10,10 @@ public class SynchronizedQueue implements Queue {
             queue.addLast(elem);
         }
     }
-    public QueueElement dequeue() {
+    public QueueElement dequeue() throws Exception {
         synchronized(this) {
+            if (queue.isEmpty()) throw new Exception("Empty Queue"); // releases lock
+
             QueueElement elem = queue.removeFirst();
             elem.timeDequeued = System.currentTimeMillis();
             return elem;

@@ -15,7 +15,11 @@ public class DequeueThread extends Thread {
     public void run() {
 
         for (int i = 0; i < n; i++) {
-            dequeuedElements[i] = q.dequeue();
+            try {
+                dequeuedElements[i] = q.dequeue();
+            } catch(Exception e){ // queue is empty
+                i--; // try again
+            }
 
             try { Thread.sleep(10); }
             catch(Exception e){ e.printStackTrace(); }

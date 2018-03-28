@@ -23,8 +23,8 @@ public class Main {
         }
         try {
             p = Integer.parseInt(args[0]);
-            q = Integer.parseInt(args[0]);
-            n = Integer.parseInt(args[0]);
+            q = Integer.parseInt(args[1]);
+            n = Integer.parseInt(args[2]);
 
             if (args.length == 4) verbose = false;
         } catch(Exception e){

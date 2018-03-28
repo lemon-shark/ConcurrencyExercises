@@ -8,5 +8,10 @@ public class QueueElement {
 
     public QueueElement(int uniqueId) {
         this.uniqueId = uniqueId;
+        this.next = new AtomicReference<>(null);
+    }
+    public QueueElement(int uniqueId, QueueElement next) {
+        this.uniqueId = uniqueId;
+        this.next = new AtomicReference<>(next);
     }
 }
