@@ -34,7 +34,6 @@ public class Main {
 
         long startTime = 0;
         long endTime = 0;
-        String[] ops = new String[] {"enq ", "deq "};
 
         /**
          * Run the expriment with a blocking, synchronized queue
@@ -50,6 +49,7 @@ public class Main {
         for (int i = 0; i < dequeueThreads.length; i++)
             dequeueThreads[i] = new DequeueThread(synq, n);
 
+        startTime = System.currentTimeMillis();
         // start the threads
         for (EnqueueThread t : enqueueThreads)
             t.start();
@@ -59,6 +59,7 @@ public class Main {
         // wait for the dequeueThreads to finish
         for (DequeueThread t : dequeueThreads)
             t.join();
+        endTime = System.currentTimeMillis();
         // ...and then kill the enqueueThreads
         for (EnqueueThread t : enqueueThreads)
             t.shouldContinueEnqueueing = false;
@@ -67,5 +68,12 @@ public class Main {
         ArrayList<QueueElement> allDequeuedElements = new ArrayList<>();
         for (DequeueThread t : dequeueThreads)
             allDequeuedElements.addAll(Arrays.asList(t.dequeuedElements));
+
+        if (verbose) MyUtil.printAllQueueOps(allDequeuedElements);
+        System.out.println(p + "    " + q + "    " + n + "    " + (endTime - startTime));
+
+        /**
+         * TODO: Run the experiment with a lock-free queue
+         */
     }
 }
