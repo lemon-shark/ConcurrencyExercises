@@ -10,10 +10,12 @@ public class Main {
          * Parse command-line arguments
          */
         String helpString = "\nusage: java Main p q n [--silent]\n" +
-            "int p: number of creation/enqueue threads\n" +
-            "int q: number of dequeue threads\n" +
-            "int n: number of dequeue operations per dequeue thread before program termination\n" +
-            "flag --silent: program will not output timestamp of every op, instead just start and end time";
+        "int p        : number of creation/enqueue threads\n" +
+        "int q        : number of dequeue threads\n" +
+        "int n        : number of dequeue operations per dequeue thread before program " +
+        "termination\n" +
+        "flag --silent: program will not output timestamp of every op, instead just start and end " +
+        "time\n               of the synchronized and lock-free queue experiments";
         String badNumArgs = "\nwrong number of arguments: 3 required plus optional --silent flag";
 
         int p, q, n;
