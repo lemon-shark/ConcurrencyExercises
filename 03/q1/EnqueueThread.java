@@ -4,18 +4,20 @@ public class EnqueueThread extends Thread {
     Queue q;
     AtomicInteger sharedCount;
 
-    public volatile boolean shouldContinueEnqueuing = true;
+    public volatile boolean shouldContinueEnqueueing = true;
 
-    public EnqueueRunnable(Queue q, AtomicInteger sharedCount) {
+    public EnqueueThread(Queue q, AtomicInteger sharedCount) {
         this.q = q;
         this.sharedCount = sharedCount;
     }
 
     @Override
     public void run() {
-        while (shouldContinueEnqueuing) {
+        while (shouldContinueEnqueueing) {
             q.enqueue(new QueueElement(sharedCount.getAndIncrement()));
-            Thread.sleep(10);
+
+            try { Thread.sleep(10); }
+            catch(Exception e){ e.printStackTrace(); }
         }
     }
 }

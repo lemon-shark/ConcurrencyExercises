@@ -4,7 +4,7 @@ public class DequeueThread extends Thread {
 
     public QueueElement[] dequeuedElements;
 
-    public DequeueRunnable(Queue q, int n) {
+    public DequeueThread(Queue q, int n) {
         this.q = q;
         this.n = n;
 
@@ -16,7 +16,9 @@ public class DequeueThread extends Thread {
 
         for (int i = 0; i < n; i++) {
             dequeuedElements[i] = q.dequeue();
-            Thread.sleep(10);
+
+            try { Thread.sleep(10); }
+            catch(Exception e){ e.printStackTrace(); }
         }
     }
 }
