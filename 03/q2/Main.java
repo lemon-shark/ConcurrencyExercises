@@ -40,9 +40,8 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
         while (conflicting.size() > 0) {
-            break; // for now while debugging
-            //   t assign threads
-            //   t detect conflict
+            break;
+            // TODO: the algorithm
         }
 
         System.out.println(
