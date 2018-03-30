@@ -7,7 +7,7 @@ public class MyUtils {
         ArrayList<Node> graph = new ArrayList<>();
         for (int i = 0; i < numNodes; i++)
             graph.add(new Node(i));
-        
+
         // create all the edges
         Random random = new Random();
         for (int i = 0; i < numEdges; i++) {
