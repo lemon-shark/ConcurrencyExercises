@@ -44,7 +44,7 @@ public class Main {
             // TODO: the algorithm
         }
 
-        long totalTime = System.currentTimeMillis - startTime;
+        long totalTime = System.currentTimeMillis() - startTime;
         System.out.println(
             n + "," + e + "," + t + "," + totalTime
         );
