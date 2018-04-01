@@ -2,6 +2,7 @@
 
 this_dir="$(dirname $(readlink -f $0))"
 build_dir="${this_dir}/build"
+cd "${this_dir}"
 
 if [ ! -d "${build_dir}" ]
 then
