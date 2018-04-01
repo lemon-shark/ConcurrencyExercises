@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayList;
 
 public class ConflictDetectorThread extends Thread {
 
@@ -11,6 +12,15 @@ public class ConflictDetectorThread extends Thread {
 
     @Override
     public void run() {
-        // TODO
+        List<Node> nodesWithConflicts = new ArrayList<>();
+        for (Node node : graph) {
+            for (Node neighbour : node.neighbours) {
+                if (node.color == neighbour.color) {
+                    nodesWithConflicts.add(node);
+                    break;
+                }
+            }
+        }
+        detectedConflicts = nodesWithConflicts;
     }
 }

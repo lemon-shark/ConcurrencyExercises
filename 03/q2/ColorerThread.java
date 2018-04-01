@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.HashSet;
 
 public class ColorerThread extends Thread {
 
@@ -9,6 +10,18 @@ public class ColorerThread extends Thread {
 
     @Override
     public void run() {
-        // TODO
+        HashSet<Integer> neighbourColors;
+        for (Node node : graph) {
+            neighbourColors = new HashSet<>();
+
+            for (Node neighbour : node.neighbours)
+                neighbourColors.add(neighbour.color);
+
+            int possibleColor = 1;
+            while (neighbourColors.contains(possibleColor))
+                possibleColor++;
+
+            node.color = possibleColor;
+        }
     }
 }
