@@ -25,7 +25,7 @@ public class Main {
         catch (Exception e) {
             e.printStackTrace();
         }
-        long timeToRunMillis = TimeUnit.SECONDS.toMillis(p);
+        long timeToRunMillis = TimeUnit.MINUTES.toMillis(p);
 
         // init gameGrid with obstacles
         gameGrid = GameGrid.getGameGridSingleton(GRID_SIZE, (int)(k * 2.5));
@@ -66,6 +66,7 @@ public class Main {
 
         // print results
         StringBuilder str = new StringBuilder();
+        str.append(n+","+p+","+r+","+k+",");
         str.append(gameCharacters.get(0).numMoves);
         for (int i = 1; i < n; i++) {
             str.append("," + gameCharacters.get(i).numMoves);
