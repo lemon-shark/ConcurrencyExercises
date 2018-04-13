@@ -1,0 +1,8 @@
+we see that as the number of 'optimistic threads' increases from 0 to 3, the speed of the
+program increases. In fact, 3 optimistic threads double the program speed in comparison to 0.
+
+However, there is notably no speedup when there is only 1 optimistic thread. This may be because
+the master thread finishes its DFA so fast that the program is essentially sequential -- no
+thread switchihng occurs.
+
+I am on a 4 core machine.

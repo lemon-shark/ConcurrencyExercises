@@ -1,5 +1,6 @@
 #include <omp.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /* A simple example of using a few of the main constructs in openmp.
  * To compile this (on linux):
@@ -37,7 +38,7 @@ int main(int argc,char *argv[]) {
 #pragma omp sections
     {
 #pragma omp section
-        { 
+        {
             int j,k=0;
             for (j=0;j<100000;j++)
                 k+=j;
@@ -46,7 +47,7 @@ int main(int argc,char *argv[]) {
                    omp_get_num_threads(),k);
         }
 #pragma omp section
-        { 
+        {
             int j,k=0;
             for (j=0;j<100000;j++)
                 k+=j;
