@@ -1,4 +1,4 @@
-package part;
+package part.base;
 
 public class Head extends CatPart {
     public static Head createInstance()

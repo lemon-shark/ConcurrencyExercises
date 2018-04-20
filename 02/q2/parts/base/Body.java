@@ -1,4 +1,4 @@
-package part;
+package part.base;
 
 public class Body extends CatPart {
     public static Body createInstance()
