@@ -1,10 +1,22 @@
 package bins;
 
-public class CompositeCatPartBin<V extends CompositeCatPart> {
-    private boolean semaphoreNotSynchronized;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.concurrent.Semaphore;
 
-    public CatPartBin(boolean semaphoreNotSynchronized)
-    { this.semaphoreNotSynchronized = semaphoreNotSynchronized; }
+public class CompositeCatPartBin<V extends CompositeCatPart> {
+    private long totalLockWaitTime;
+    private boolean semaphoreNotSynchronized;
+    private Semaphore semaphore;
+    private Deque<V> contents;
+
+    public CatPartBin(boolean semaphoreNotSynchronized) {
+        this.semaphoreNotSynchronized = semaphoreNotSynchronized;
+
+        this.totalLockWaitTime = 0;
+        this.contents = new ArrayDeque<V>();
+        if (semaphoreNotSynchronized) semaphore = new Semaphore(1);
+    }
 
     public V takeOne() {
         if (semaphoreNotSynchronized)
@@ -19,9 +31,61 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
             putOneSynch(v);
     }
 
-    private V takeOneSynch();
-    private void putOneSynch(V v);
+    // takeOne and putOne using synchronized
+    private V takeOneSynch() {
+        long startTime = System.currentTimeMillis();
+        synchronized(this) {
+            totalLockWaitTime += System.currentTimeMillis();
 
-    private V takeOneSem();
-    private void putOneSem(V v);
+            startTime = System.currentTimeMillis();
+            while (contents.isEmpty()) {
+                wait();
+            }
+            totalLockWaitTime += System.currentTimeMillis() - startTime;
+
+            return contents.getFirst();
+        }
+    }
+    private void putOneSynch(V v) {
+        long startTime = System.currentTimeMillis();
+        synchronized(this) {
+            totalLockWaitTime += System.currentTimeMillis();
+
+            contents.addLast(v);
+            notify();
+        }
+    }
+
+    // takeOne and putOne using semaphore
+    private V takeOneSem() {
+        long startTime = System.currentTimeMillis();
+        semaphore.acquire();
+        try {
+            totalLockWaitTime += System.currentTimeMillis() - startTime;
+
+            startTime = System.currentTimeMillis();
+            while (contents.isEmpty()) {
+                semaphore.release();
+                semaphore.acquire();
+            }
+            totalLockWaitTime += System.currentTimeMillis() - startTime;
+
+            return contents.getFirst();
+        }
+        finally {
+            semaphore.release();
+        }
+    }
+    private void putOneSem(V v) {
+        long startTime = System.currentTimeMillis();
+        semaphore.acquire();
+        try {
+            totalLockWaitTime += System.currentTimeMillis() - startTime;
+
+            contents.addLast(v);
+        }
+        finally {
+            semaphore.release();
+        }
+    }
 }

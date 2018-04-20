@@ -1,4 +1,5 @@
 package part;
 
-public class CatPart {
+public abstract class CatPart {
+    public static abstract CatPart createInstance();
 }
