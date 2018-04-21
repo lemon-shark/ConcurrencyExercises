@@ -1,4 +1,4 @@
-package part.base;
+package parts.base;
 
 public class Tail extends BaseCatPart {
     public static Tail createInstance()

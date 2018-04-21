@@ -1,7 +1,8 @@
-package part.base;
+package parts.base;
 
-import part.CatPart;
+import parts.CatPart;
 
-public abstract class BaseCatPart extends CatPart {
-    public static abstract BaseCatPart createInstance();
+public class BaseCatPart extends CatPart {
+    public static BaseCatPart createInstance()
+    { return new BaseCatPart(); }
 }

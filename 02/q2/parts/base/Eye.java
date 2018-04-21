@@ -1,4 +1,4 @@
-package part.base;
+package parts.base;
 
 public class Eye extends BaseCatPart {
     public static Eye createInstance()

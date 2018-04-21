@@ -1,4 +1,4 @@
-package part.composite;
+package parts.composite;
 
 public class ForeLeg extends CompositeCatPart {
 }

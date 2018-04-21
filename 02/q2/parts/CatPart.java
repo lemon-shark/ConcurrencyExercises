@@ -1,4 +1,4 @@
-package part;
+package parts;
 
 public class CatPart {
 }
