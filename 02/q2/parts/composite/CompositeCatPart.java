@@ -10,13 +10,7 @@ public class CompositeCatPart extends CatPart {
         this.catParts = new ArrayList<CatPart>();
     }
 
-    public CompositeCatPart(List<CatPart> catParts) {
-        this.catParts = catParts;
+    public void addCatParts(List<CatPart> catParts) {
+        this.catParts.addAll(catParts);
     }
-
-    public void addCatPart(CatPart catPart)
-    { this.catParts.add(catPart); }
-
-    public void addCatParts(List<CatPart> catParts)
-    { this.catParts.addAll(catParts); }
 }

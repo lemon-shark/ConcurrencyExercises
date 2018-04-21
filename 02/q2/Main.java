@@ -1,5 +1,9 @@
+import parts.base.*;
+import parts.composite.*;
+import bins.*;
+
 public class Main {
     public static void main(String[] args) {
-        // TODO
+        Leg leg = new Leg();
     }
 }
