@@ -1,25 +1,26 @@
 package bins;
 
+import parts.base.BaseCatPart;
+
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.concurrent.Semaphore;
 
-public class BaseCatPartBin<V extends CatPart> {
+public class BaseCatPartBin<V extends BaseCatPart> {
     private volatile long totalLockWaitTime;
     private boolean semaphoreNotSynchronized;
     private Semaphore semaphore;
 
-    public CatPartBin(boolean semaphoreNotSynchronized) {
+    public BaseCatPartBin(boolean semaphoreNotSynchronized) {
         this.semaphoreNotSynchronized = semaphoreNotSynchronized;
 
         this.totalLockWaitTime = 0;
-        this.contents = new ArrayList<V>();
         if (semaphoreNotSynchronized) semaphore = new Semaphore(1);
     }
 
     public V takeOne() {
         if (semaphoreNotSynchronized)
-            return takeOneSemaphore();
+            return takeOneSem();
         else
             return takeOneSynch();
     }
@@ -29,17 +30,18 @@ public class BaseCatPartBin<V extends CatPart> {
         synchronized (this) {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return V.createInstance();
+            return (V) V.createInstance();
         }
     }
 
     private V takeOneSem() {
         long startTime = System.currentTimeMillis();
-        semaphore.acquire();
+        try { semaphore.acquire(); }
+        catch(Exception e){ e.printStackTrace(); }
         try {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return new V.createInstance();
+            return (V) V.createInstance();
         }
         finally {
             semaphore.release();

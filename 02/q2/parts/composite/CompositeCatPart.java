@@ -1,5 +1,7 @@
 package parts.composite;
 
+import parts.CatPart;
+
 import java.util.List;
 import java.util.ArrayList;
 

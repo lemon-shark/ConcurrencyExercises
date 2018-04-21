@@ -1,5 +1,7 @@
 package bins;
 
+import parts.composite.CompositeCatPart;
+
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.concurrent.Semaphore;
@@ -10,7 +12,7 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
     private Semaphore semaphore;
     private Deque<V> contents;
 
-    public CatPartBin(boolean semaphoreNotSynchronized) {
+    public CompositeCatPartBin(boolean semaphoreNotSynchronized) {
         this.semaphoreNotSynchronized = semaphoreNotSynchronized;
 
         this.totalLockWaitTime = 0;
@@ -20,7 +22,7 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
 
     public V takeOne() {
         if (semaphoreNotSynchronized)
-            return takeOneSemaphore();
+            return takeOneSem();
         else
             return takeOneSynch();
     }
@@ -39,7 +41,8 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
 
             startTime = System.currentTimeMillis();
             while (contents.isEmpty()) {
-                wait();
+                try { wait(); }
+                catch(Exception e){ e.printStackTrace(); }
             }
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
@@ -59,14 +62,16 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
     // takeOne and putOne using semaphore
     private V takeOneSem() {
         long startTime = System.currentTimeMillis();
-        semaphore.acquire();
+        try { semaphore.acquire(); }
+        catch(Exception e){ e.printStackTrace(); }
         try {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
             startTime = System.currentTimeMillis();
             while (contents.isEmpty()) {
                 semaphore.release();
-                semaphore.acquire();
+                try { semaphore.acquire(); }
+                catch(Exception e){ e.printStackTrace(); }
             }
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
@@ -78,7 +83,8 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
     }
     private void putOneSem(V v) {
         long startTime = System.currentTimeMillis();
-        semaphore.acquire();
+        try { semaphore.acquire(); }
+        catch(Exception e){ e.printStackTrace(); }
         try {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
