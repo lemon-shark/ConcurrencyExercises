@@ -6,42 +6,63 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.concurrent.Semaphore;
 
+import java.lang.reflect.Constructor;
+
 public class BaseCatPartBin<V extends BaseCatPart> {
-    private volatile long totalLockWaitTime;
     private boolean semaphoreNotSynchronized;
     private Semaphore semaphore;
+    private Constructor vConstructor;
 
-    public BaseCatPartBin(boolean semaphoreNotSynchronized) {
+    public BaseCatPartBin(boolean semaphoreNotSynchronized, Class clazz) {
         this.semaphoreNotSynchronized = semaphoreNotSynchronized;
 
-        this.totalLockWaitTime = 0;
+        try {
+            this.vConstructor = clazz.getConstructor();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
         if (semaphoreNotSynchronized) semaphore = new Semaphore(1);
     }
 
-    public V takeOne() {
+    public BinValue<V> takeOne() {
         if (semaphoreNotSynchronized)
             return takeOneSem();
         else
             return takeOneSynch();
     }
 
-    private V takeOneSynch() {
+    private BinValue<V> takeOneSynch() {
+        long totalLockWaitTime = 0;
         long startTime = System.currentTimeMillis();
         synchronized (this) {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return (V) V.createInstance();
+            try {
+                // return an object containing the lock wait time and the value itself
+                return new BinValue<V>(totalLockWaitTime, (V) vConstructor.newInstance());
+            } catch(Exception e){
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 
-    private V takeOneSem() {
+    private BinValue<V> takeOneSem() {
+        long totalLockWaitTime = 0;
         long startTime = System.currentTimeMillis();
         try { semaphore.acquire(); }
         catch(Exception e){ e.printStackTrace(); }
         try {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return (V) V.createInstance();
+            try {
+                // return an object containing the lock wait time and the value itself
+                return new BinValue<V>(totalLockWaitTime, (V) vConstructor.newInstance());
+            } catch(Exception e){
+                e.printStackTrace();
+                return null;
+            }
         }
         finally {
             semaphore.release();

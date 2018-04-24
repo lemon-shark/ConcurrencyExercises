@@ -18,17 +18,20 @@ import parts.composite.HindLeg;
 
 import bins.BaseCatPartBin;
 import bins.CompositeCatPartBin;
+import bins.BinValue;
+
+import java.lang.reflect.Constructor;
 
 public class Main {
     private static final boolean monitor = false;
     private static final boolean semaphore = true;
     private static boolean synchStyle; // will be set to either semaphore or monitor
 
-    String helpString = "" +
+    private static String helpString = "" +
         "usage: java Main [--semaphore]" +
         "  --semaphore: optional flag. if flag is provided then use semaphores instead of monitors";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /** Parse Command-Line Arguments */
         if (args.length > 1)
             throw new Exception(helpString);
@@ -38,6 +41,10 @@ public class Main {
             synchStyle = monitor;
 
         /** Create All The Bins */
+        BaseCatPartBin<Whisker> whiskerBin = new BaseCatPartBin<Whisker>(synchStyle, Whisker.class);
+        BinValue<Whisker> whiskerBinValue = whiskerBin.takeOne();
+        Whisker whisker  = whiskerBinValue.getValue();
+        long lockWaitTime = whiskerBinValue.getLockWaitTime();
 
         /** Create All The Robots */
     }
