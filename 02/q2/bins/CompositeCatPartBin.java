@@ -7,7 +7,6 @@ import java.util.ArrayDeque;
 import java.util.concurrent.Semaphore;
 
 public class CompositeCatPartBin<V extends CompositeCatPart> {
-    private long totalLockWaitTime;
     private boolean semaphoreNotSynchronized;
     private Semaphore semaphore;
     private Deque<V> contents;
@@ -15,27 +14,27 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
     public CompositeCatPartBin(boolean semaphoreNotSynchronized) {
         this.semaphoreNotSynchronized = semaphoreNotSynchronized;
 
-        this.totalLockWaitTime = 0;
         this.contents = new ArrayDeque<V>();
         if (semaphoreNotSynchronized) semaphore = new Semaphore(1);
     }
 
-    public V takeOne() {
+    public BinValue<V> takeOne() {
         if (semaphoreNotSynchronized)
             return takeOneSem();
         else
             return takeOneSynch();
     }
-    public void putOne(V v) {
+    public long putOne(V v) {
         if (semaphoreNotSynchronized)
-            putOneSem(v);
+            return putOneSem(v);
         else
-            putOneSynch(v);
+            return putOneSynch(v);
     }
 
     // takeOne and putOne using synchronized
-    private V takeOneSynch() {
+    private BinValue<V> takeOneSynch() {
         long startTime = System.currentTimeMillis();
+        long totalLockWaitTime = 0;
         synchronized(this) {
             totalLockWaitTime += System.currentTimeMillis();
 
@@ -46,22 +45,26 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
             }
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return contents.getFirst();
+            return new BinValue<V>(totalLockWaitTime, contents.getFirst());
         }
     }
-    private void putOneSynch(V v) {
+    private long putOneSynch(V v) {
         long startTime = System.currentTimeMillis();
+        long totalLockWaitTime = 0;
         synchronized(this) {
             totalLockWaitTime += System.currentTimeMillis();
 
             contents.addLast(v);
             notify();
+
+            return totalLockWaitTime;
         }
     }
 
     // takeOne and putOne using semaphore
-    private V takeOneSem() {
+    private BinValue<V> takeOneSem() {
         long startTime = System.currentTimeMillis();
+        long totalLockWaitTime = 0;
         try { semaphore.acquire(); }
         catch(Exception e){ e.printStackTrace(); }
         try {
@@ -75,20 +78,23 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
             }
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
-            return contents.getFirst();
+            return new BinValue<V>(totalLockWaitTime, contents.getFirst());
         }
         finally {
             semaphore.release();
         }
     }
-    private void putOneSem(V v) {
+    private long putOneSem(V v) {
         long startTime = System.currentTimeMillis();
+        long totalLockWaitTime = 0;
         try { semaphore.acquire(); }
         catch(Exception e){ e.printStackTrace(); }
         try {
             totalLockWaitTime += System.currentTimeMillis() - startTime;
 
             contents.addLast(v);
+
+            return totalLockWaitTime;
         }
         finally {
             semaphore.release();

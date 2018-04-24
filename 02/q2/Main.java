@@ -41,10 +41,39 @@ public class Main {
             synchStyle = monitor;
 
         /** Create All The Bins */
-        BaseCatPartBin<Whisker> whiskerBin = new BaseCatPartBin<Whisker>(synchStyle, Whisker.class);
-        BinValue<Whisker> whiskerBinValue = whiskerBin.takeOne();
-        Whisker whisker  = whiskerBinValue.getValue();
-        long lockWaitTime = whiskerBinValue.getLockWaitTime();
+        BaseCatPartBin<Body>    bodyBin =
+            new BaseCatPartBin<Body>(synchStyle, Body.class);
+        BaseCatPartBin<Eye>     eyeBin =
+            new BaseCatPartBin<Eye>(synchStyle, Eye.class);
+        BaseCatPartBin<Head>    headBin =
+            new BaseCatPartBin<Head>(synchStyle, Head.class);
+        BaseCatPartBin<Leg>     legBin =
+            new BaseCatPartBin<Leg>(synchStyle, Leg.class);
+        BaseCatPartBin<Tail>    tailBin =
+            new BaseCatPartBin<Tail>(synchStyle, Tail.class);
+        BaseCatPartBin<Toe>     toeBin =
+            new BaseCatPartBin<Toe>(synchStyle, Toe.class);
+        BaseCatPartBin<Whisker> whiskerBin =
+            new BaseCatPartBin<Whisker>(synchStyle, Whisker.class);
+
+        CompositeCatPartBin<BodyWithLegs>         bodyWithLegsBin =
+            new CompositeCatPartBin<BodyWithLegs>(synchStyle);
+        CompositeCatPartBin<BodyWithLegsTail>     bodyWithLegsTailBin =
+            new CompositeCatPartBin<BodyWithLegsTail>(synchStyle);
+        CompositeCatPartBin<BodyWithTail>         bodyWithTailBin =
+            new CompositeCatPartBin<BodyWithTail>(synchStyle);
+        CompositeCatPartBin<CatComplete>          catCompleteBin =
+            new CompositeCatPartBin<CatComplete>(synchStyle);
+        CompositeCatPartBin<ForeLeg>              foreLegBin =
+            new CompositeCatPartBin<ForeLeg>(synchStyle);
+        CompositeCatPartBin<HeadWithEyes>         headWithEyesBin =
+            new CompositeCatPartBin<HeadWithEyes>(synchStyle);
+        CompositeCatPartBin<HeadWithEyesWhiskers> headWithEyesWhiskersBin =
+            new CompositeCatPartBin<HeadWithEyesWhiskers>(synchStyle);
+        CompositeCatPartBin<HeadWithWhiskers>     headWithWhiskersBin =
+            new CompositeCatPartBin<HeadWithWhiskers>(synchStyle);
+        CompositeCatPartBin<HindLeg>              hindLegBin =
+            new CompositeCatPartBin<HindLeg>(synchStyle);
 
         /** Create All The Robots */
     }
