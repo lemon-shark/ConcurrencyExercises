@@ -20,7 +20,13 @@ import bins.BaseCatPartBin;
 import bins.CompositeCatPartBin;
 import bins.BinValue;
 
-import java.lang.reflect.Constructor;
+import robots.BodyLegRobot;
+import robots.BodyTailRobot;
+import robots.CompleteCatRobot;
+import robots.HeadEyeRobot;
+import robots.HeadWhiskerRobot;
+import robots.LegRobot;
+import robots.Robot;
 
 public class Main {
     private static final boolean monitor = false;
@@ -62,8 +68,6 @@ public class Main {
             new CompositeCatPartBin<BodyWithLegsTail>(synchStyle);
         CompositeCatPartBin<BodyWithTail>         bodyWithTailBin =
             new CompositeCatPartBin<BodyWithTail>(synchStyle);
-        CompositeCatPartBin<CatComplete>          catCompleteBin =
-            new CompositeCatPartBin<CatComplete>(synchStyle);
         CompositeCatPartBin<ForeLeg>              foreLegBin =
             new CompositeCatPartBin<ForeLeg>(synchStyle);
         CompositeCatPartBin<HeadWithEyes>         headWithEyesBin =
@@ -74,7 +78,139 @@ public class Main {
             new CompositeCatPartBin<HeadWithWhiskers>(synchStyle);
         CompositeCatPartBin<HindLeg>              hindLegBin =
             new CompositeCatPartBin<HindLeg>(synchStyle);
+        CompositeCatPartBin<CatComplete>          catCompleteBin =
+            new CompositeCatPartBin<CatComplete>(synchStyle);
 
         /** Create All The Robots */
+        LegRobot legRobot1 = new LegRobot(
+                legBin,
+                toeBin,
+                hindLegBin,
+                foreLegBin
+        );
+        LegRobot legRobot2 = new LegRobot(
+                legBin,
+                toeBin,
+                hindLegBin,
+                foreLegBin
+        );
+        BodyLegRobot bodyLegRobot1 = new BodyLegRobot(
+                bodyBin,
+                bodyWithTailBin,
+                hindLegBin,
+                foreLegBin,
+                bodyWithLegsBin,
+                bodyWithLegsTailBin
+        );
+        BodyLegRobot bodyLegRobot2 = new BodyLegRobot(
+                bodyBin,
+                bodyWithTailBin,
+                hindLegBin,
+                foreLegBin,
+                bodyWithLegsBin,
+                bodyWithLegsTailBin
+        );
+        BodyTailRobot bodyTailRobot1 = new BodyTailRobot(
+                bodyBin,
+                tailBin,
+                bodyWithLegsBin,
+                bodyWithTailBin,
+                bodyWithLegsTailBin
+        );
+        BodyTailRobot bodyTailRobot2 = new BodyTailRobot(
+                bodyBin,
+                tailBin,
+                bodyWithLegsBin,
+                bodyWithTailBin,
+                bodyWithLegsTailBin
+        );
+        HeadEyeRobot headEyeRobot1 = new HeadEyeRobot(
+                headBin,
+                eyeBin,
+                headWithEyesBin,
+                headWithWhiskersBin,
+                headWithEyesWhiskersBin
+        );
+        HeadEyeRobot headEyeRobot2 = new HeadEyeRobot(
+                headBin,
+                eyeBin,
+                headWithEyesBin,
+                headWithWhiskersBin,
+                headWithEyesWhiskersBin
+        );
+        HeadWhiskerRobot headWhiskerRobot1 = new HeadWhiskerRobot(
+                headBin,
+                whiskerBin,
+                headWithEyesBin,
+                headWithWhiskersBin,
+                headWithEyesWhiskersBin
+        );
+        HeadWhiskerRobot headWhiskerRobot2 = new HeadWhiskerRobot(
+                headBin,
+                whiskerBin,
+                headWithEyesBin,
+                headWithWhiskersBin,
+                headWithEyesWhiskersBin
+        );
+
+        CompleteCatRobot completeCatRobot = new CompleteCatRobot(
+                headWithEyesWhiskersBin,
+                bodyWithTailsLegsBin,
+                catCompleteBin
+        );
+
+        Robot[] robots = new Robot[] {
+            legRobot1,
+            legRobot2,
+            bodyLegRobot1,
+            bodyLegRobot2,
+            bodyTailRobot1,
+            bodyTailRobot2,
+            headEyeRobot1,
+            headEyeRobot2,
+            headWhiskerRobot1,
+            headWhiskerRobot2,
+        };
+
+        long startTime = System.currentTimeMillis();
+
+        /** Start all the robots */
+        for (Robot robot : robots)
+            robot.start();
+        completeCatRobot.start();
+
+        /** Wait for the CompleteCatRobot to finish, then stop all robots */
+        completeCatRobot.join();
+
+        long endTime = System.currentTimeMillis();
+
+        for (Robot robot : robots)
+            robot.turnOff();
+
+        /** Output the results of the experiment */
+        String robotNames = new String[] {
+            "legRobot1",
+            "legRobot2",
+            "bodyLegRobot1",
+            "bodyLegRobot2",
+            "bodyTailRobot1",
+            "bodyTailRobot2",
+            "headEyeRobot1",
+            "headEyeRobot2",
+            "headWhiskerRobot1",
+            "headWhiskerRobot2",
+            "competeCatRobot"
+        };
+
+        System.out.print("totalTime");
+        for (String robotName : robotNames)
+            System.out.print("," + robotName);
+
+        System.out.println();
+
+        System.out.print(endTime - startTime);
+        for (Robot robot : robots)
+            System.out.print("," + robot.getTotalLockWaitTime());
+        System.out.println("," + competeCatRobot.getTotalLockWaitTime());
     }
 }
