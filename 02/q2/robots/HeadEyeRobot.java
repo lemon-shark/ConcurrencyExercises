@@ -40,6 +40,49 @@ public class HeadEyeRobot extends Robot {
     }
 
     protected void assembleCatPart() {
-        // TODO
+        long lockWaitTime = 0;
+
+        if (getRandomBoolean()) { // use headWithWhiskers
+            BinValue<HeadWithWhiskers> headWithWhiskersAndTime = headWithWhiskerBin.takeOne();
+            BinValue<Eye> eyeAndTime1 = eyeBin.takeOne();
+            BinValue<Eye> eyeAndTime2 = eyeBin.takeOne();
+
+            lockWaitTime += headWithWhiskersAndTime.getLockWaitTime();
+            lockWaitTime += eyeAndTime1.getLockWaitTime();
+            lockWaitTime += eyeAndTime2.getLockWaitTime();
+
+            HeadWithEyesWhiskers headWithEyesWhiskers = new HeadWithEyesWhiskers();
+            ArrayList<CatPart> catParts = new ArrayList<>();
+            catParts.add(headWithWhiskersAndTime.getValue());
+            catParts.add(eyeAndTime1.getValue());
+            catParts.add(eyeAndTime2.getValue());
+            headWithEyesWhiskers.addCatParts(catParts);
+
+            spendTimeWorking();
+
+            lockWaitTime += headWithEyesWhiskersBin.putOne(headWithEyesWhiskers);
+        }
+        else { // ues head (without whiskers)
+            BinValue<Head> headAndTime = headBin.takeOne();
+            BinValue<Eye> eyeAndTime1 = eyeBin.takeOne();
+            BinValue<Eye> eyeAndTime2 = eyeBin.takeOne();
+
+            lockWaitTime += headAndTime.getLockWaitTime();
+            lockWaitTime += eyeAndTime1.getLockWaitTime();
+            lockWaitTime += eyeAndTime2.getLockWaitTime();
+
+            HeadWithEyesWhiskers headWithEyes = new HeadWithEyes();
+            ArrayList<CatPart> catParts = new ArrayList<>();
+            catParts.add(headAndTime.getValue());
+            catParts.add(eyeAndTime1.getValue());
+            catParts.add(eyeAndTime2.getValue());
+            headWithEyes.addCatParts(catParts);
+
+            spendTimeWorking();
+
+            lockWaitTime += headWithEyesBin.putOne(headWithEyes);
+        }
+
+        addToTotalLockWaitTime(lockWaitTime);
     }
 }
