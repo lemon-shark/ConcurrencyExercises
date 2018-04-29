@@ -187,6 +187,8 @@ public class Main {
 
         /** Start all the robots */
         for (Robot robot : robots)
+            robot.setDaemon(true);
+        for (Robot robot : robots)
             robot.start();
         completeCatRobot.start();
 

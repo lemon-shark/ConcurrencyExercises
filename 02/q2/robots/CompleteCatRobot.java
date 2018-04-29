@@ -56,4 +56,7 @@ public class CompleteCatRobot extends Robot {
         lockWaitTime += fullCatBin.putOne(fullCat);
         addToTotalLockWaitTime(lockWaitTime);
     }
+
+    protected long getWorkTimeMin() { return this.workTimeMin; }
+    protected long getWorkTimeMax() { return this.workTimeMax; }
 }

@@ -18,6 +18,9 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
         if (semaphoreNotSynchronized) semaphore = new Semaphore(1);
     }
 
+    public int getSize()
+    { return this.contents.size(); }
+
     public BinValue<V> takeOne() {
         if (semaphoreNotSynchronized)
             return takeOneSem();

@@ -86,4 +86,7 @@ public class HeadEyeRobot extends Robot {
 
         addToTotalLockWaitTime(lockWaitTime);
     }
+
+    protected long getWorkTimeMin() { return this.workTimeMin; }
+    protected long getWorkTimeMax() { return this.workTimeMax; }
 }

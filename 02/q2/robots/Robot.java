@@ -24,10 +24,13 @@ public abstract class Robot extends Thread {
 
     protected void spendTimeWorking() {
         long randomLongInRange =
-            ThreadLocalRandom.current().nextLong(workTimeMin, workTimeMax+1);
+            ThreadLocalRandom.current().nextLong(getWorkTimeMin(), getWorkTimeMax()+1);
         try { Thread.sleep(randomLongInRange);
         } catch(Exception e){ e.printStackTrace(); }
     }
+    
+    protected abstract long getWorkTimeMin();
+    protected abstract long getWorkTimeMax();
 
     protected void addToTotalLockWaitTime(long time)
     { this.totalLockWaitTime += time; }
