@@ -14,24 +14,22 @@ import bins.CompositeCatPartBin;
 import bins.BinValue;
 
 public class HeadWhiskerRobot extends Robot {
-    private final long workTimeMin = 20;
-    private final long workTimeMax = 60;
+    protected final long workTimeMin = 20;
+    protected final long workTimeMax = 60;
 
-    private BaseCatPartBin<Head> headbin;
+    private BaseCatPartBin<Head> headBin;
     private BaseCatPartBin<Whisker> whiskerBin;
     private CompositeCatPartBin<HeadWithEyes> headWithEyesBin;
     private CompositeCatPartBin<HeadWithWhiskers> headWithWhiskersBin;
     private CompositeCatPartBin<HeadWithEyesWhiskers> headWithEyesWhiskersBin;
 
     public HeadWhiskerRobot(
-            BaseCatPartBin<Head> headbin,
+            BaseCatPartBin<Head> headBin,
             BaseCatPartBin<Whisker> whiskerBin,
             CompositeCatPartBin<HeadWithEyes> headWithEyesBin,
             CompositeCatPartBin<HeadWithWhiskers> headWithWhiskersBin,
             CompositeCatPartBin<HeadWithEyesWhiskers> headWithEyesWhiskersBin
     ) {
-        super(workTimeMin, workTimeMax);
-
         this.headBin = headBin;
         this.whiskerBin = whiskerBin;
         this.headWithEyesBin = headWithEyesBin;
@@ -41,7 +39,7 @@ public class HeadWhiskerRobot extends Robot {
 
     @Override
     protected void assembleCatPart() {
-        long lockWaitTime();
+        long lockWaitTime = 0;
 
         if (getRandomBoolean()) { // use headWithEyes
             BinValue<HeadWithEyes> headWithEyesAndTime = headWithEyesBin.takeOne();

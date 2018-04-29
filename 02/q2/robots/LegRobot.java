@@ -13,8 +13,8 @@ import bins.CompositeCatPartBin;
 import bins.BinValue;
 
 public class LegRobot extends Robot {
-    private final long workTimeMin = 30;
-    private final long workTimeMax = 50;
+    protected final long workTimeMin = 30;
+    protected final long workTimeMax = 50;
 
     private BaseCatPartBin<Leg> legBin;
     private BaseCatPartBin<Toe> toeBin;
@@ -27,8 +27,6 @@ public class LegRobot extends Robot {
             CompositeCatPartBin<HindLeg> hindLegBin,
             CompositeCatPartBin<ForeLeg> foreLegBin
     ) {
-        super(workTimeMin, workTimeMax);
-
         this.legBin = legBin;
         this.toeBin = toeBin;
         this.hindLegBin = hindLegBin;

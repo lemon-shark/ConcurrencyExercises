@@ -13,8 +13,8 @@ import bins.BinValue;
 public class CompleteCatRobot extends Robot {
     private final int NUM_CATS_TO_BUILD = 250;
 
-    private final long workTimeMin = 10;
-    private final long workTimeMax = 20;
+    protected final long workTimeMin = 10;
+    protected final long workTimeMax = 20;
 
     private int count = 0;
 
@@ -27,8 +27,6 @@ public class CompleteCatRobot extends Robot {
             CompositeCatPartBin<BodyWithLegsTail> bodyBin,
             CompositeCatPartBin<CatComplete> fullCatBin
     ) {
-        super(workTimeMin, workTimeMax);
-
         this.headBin = headBin;
         this.bodyBin = bodyBin;
         this.fullCatBin = fullCatBin;
@@ -48,7 +46,7 @@ public class CompleteCatRobot extends Robot {
         ArrayList<CatPart> catParts = new ArrayList<>();
         catParts.add(headAndTime.getValue());
         catParts.add(bodyAndTime.getValue());
-        fullCat.addParts(catParts);
+        fullCat.addCatParts(catParts);
 
         spendTimeWorking();
 

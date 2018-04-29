@@ -1,16 +1,14 @@
+package robots;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Robot extends Thread {
-    private boolean shouldKeepRunning = true;
-    private long totalLockWaitTime = 0;
+    protected boolean shouldKeepRunning = true;
+    protected long totalLockWaitTime = 0;
 
-    private long workTimeMin;
-    private long workTimeMax;
-
-    public Robot(long workTimeMin, long workTimeMax) {
-        this.workTimeMin = workTimeMin;
-        this.workTimeMax = workTimeMax;
-    }
+    // override this in subclasses
+    protected final long workTimeMin = 0;
+    protected final long workTimeMax = 0;
 
     @Override
     public void run() {
@@ -21,8 +19,12 @@ public abstract class Robot extends Thread {
 
     protected abstract void assembleCatPart();
 
-    protected void spendTimeWorking()
-    { Thread.sleep(ThreadLocalRandom.current().nextLong(workTimeMin, workTimeMax+1)); }
+    protected void spendTimeWorking() {
+        long randomLongInRange =
+            ThreadLocalRandom.current().nextLong(workTimeMin, workTimeMax+1);
+        try { Thread.sleep(randomLongInRange);
+        } catch(Exception e){ e.printStackTrace(); }
+    }
 
     protected void addToTotalLockWaitTime(long time)
     { this.totalLockWaitTime += time; }

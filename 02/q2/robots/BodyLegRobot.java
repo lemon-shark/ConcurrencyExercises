@@ -15,8 +15,8 @@ import bins.CompositeCatPartBin;
 import bins.BinValue;
 
 public class BodyLegRobot extends Robot {
-    private final long workTimeMin = 30;
-    private final long workTimeMax = 50;
+    protected final long workTimeMin = 30;
+    protected final long workTimeMax = 50;
 
     private BaseCatPartBin<Body> bodyBin;
     private CompositeCatPartBin<BodyWithTail> bodyWithTailBin;
@@ -29,12 +29,10 @@ public class BodyLegRobot extends Robot {
             BaseCatPartBin<Body> bodyBin,
             CompositeCatPartBin<BodyWithTail> bodyWithTailBin,
             CompositeCatPartBin<HindLeg> hindLegBin,
-            CompositeCatPartBin<ForeLeg> foreLegBin
+            CompositeCatPartBin<ForeLeg> foreLegBin,
             CompositeCatPartBin<BodyWithLegs> bodyWithLegsBin,
             CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin
     ) {
-        super(workTimeMin, workTimeMax);
-
         this.bodyBin = bodyBin;
         this.bodyWithTailBin = bodyWithTailBin;
         this.hindLegBin = hindLegBin;
@@ -96,7 +94,7 @@ public class BodyLegRobot extends Robot {
 
             spendTimeWorking();
 
-            lockWaitTime += bodyWithLegsTailBin.putOne(bodyWithLegsTail);
+            lockWaitTime += bodyWithLegsBin.putOne(bodyWithLegs);
         }
 
         addToTotalLockWaitTime(lockWaitTime);

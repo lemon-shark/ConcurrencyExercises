@@ -155,7 +155,7 @@ public class Main {
 
         CompleteCatRobot completeCatRobot = new CompleteCatRobot(
                 headWithEyesWhiskersBin,
-                bodyWithTailsLegsBin,
+                bodyWithLegsTailBin,
                 catCompleteBin
         );
 
@@ -188,7 +188,7 @@ public class Main {
             robot.turnOff();
 
         /** Output the results of the experiment */
-        String robotNames = new String[] {
+        String[] robotNames = new String[] {
             "legRobot1",
             "legRobot2",
             "bodyLegRobot1",
@@ -199,7 +199,7 @@ public class Main {
             "headEyeRobot2",
             "headWhiskerRobot1",
             "headWhiskerRobot2",
-            "competeCatRobot"
+            "completeCatRobot"
         };
 
         System.out.print("totalTime");
@@ -211,6 +211,6 @@ public class Main {
         System.out.print(endTime - startTime);
         for (Robot robot : robots)
             System.out.print("," + robot.getTotalLockWaitTime());
-        System.out.println("," + competeCatRobot.getTotalLockWaitTime());
+        System.out.println("," + completeCatRobot.getTotalLockWaitTime());
     }
 }

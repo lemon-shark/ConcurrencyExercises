@@ -7,30 +7,29 @@ import parts.base.Body;
 import parts.base.Tail;
 import parts.composite.BodyWithLegs;
 import parts.composite.BodyWithTail;
+import parts.composite.BodyWithLegsTail;
 
 import bins.BaseCatPartBin;
 import bins.CompositeCatPartBin;
 import bins.BinValue;
 
 public class BodyTailRobot extends Robot {
-    private final long workTimeMin = 10;
-    private final long workTimeMax = 20;
+    protected final long workTimeMin = 10;
+    protected final long workTimeMax = 20;
 
-    private BaseCatPart<Body> bodyBin;
+    private BaseCatPartBin<Body> bodyBin;
     private BaseCatPartBin<Tail> tailBin;
     private CompositeCatPartBin<BodyWithLegs> bodyWithLegsBin;
     private CompositeCatPartBin<BodyWithTail> bodyWithTailBin;
     private CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin;
 
     public BodyTailRobot(
-            BaseCatPart<Body> bodyBin,
+            BaseCatPartBin<Body> bodyBin,
             BaseCatPartBin<Tail> tailBin,
             CompositeCatPartBin<BodyWithLegs> bodyWithLegsBin,
             CompositeCatPartBin<BodyWithTail> bodyWithTailBin,
             CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin
     ) {
-        super(workTimeMin, workTimeMax);
-
         this.bodyBin = bodyBin;
         this.tailBin = tailBin;
         this.bodyWithLegsBin = bodyWithLegsBin;
@@ -51,16 +50,16 @@ public class BodyTailRobot extends Robot {
             BodyWithLegsTail bodyWithLegsTail = new BodyWithLegsTail();
             ArrayList<CatPart> catParts = new ArrayList<>();
             catParts.add(bodyWithLegsAndTime.getValue());
-            catParts.add(tailAndtime.getValue());
+            catParts.add(tailAndTime.getValue());
             bodyWithLegsTail.addCatParts(catParts);
 
             spendTimeWorking();
 
             lockWaitTime += bodyWithLegsTailBin.putOne(bodyWithLegsTail);
         }
-        else {
+        else { // use body (without legs)
             BinValue<Body> bodyAndTime = bodyBin.takeOne();
-            BinVale<Tail> tailAndTime = tailBin.takeOne();
+            BinValue<Tail> tailAndTime = tailBin.takeOne();
 
             lockWaitTime += bodyAndTime.getLockWaitTime();
             lockWaitTime += tailAndTime.getLockWaitTime();
@@ -69,7 +68,7 @@ public class BodyTailRobot extends Robot {
             ArrayList<CatPart> catParts = new ArrayList<>();
             catParts.add(bodyAndTime.getValue());
             catParts.add(tailAndTime.getValue());
-            bodyWithLegs.addCarParts(catParts);
+            bodyWithLegs.addCatParts(catParts);
 
             spendTimeWorking();
 
