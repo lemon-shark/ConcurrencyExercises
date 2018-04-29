@@ -23,10 +23,13 @@ public class CompleteCatRobot extends Robot {
     private CompositeCatPartBin<CatComplete> fullCatBin;
 
     public CompleteCatRobot(
+            String name,
             CompositeCatPartBin<HeadWithEyesWhiskers> headBin,
             CompositeCatPartBin<BodyWithLegsTail> bodyBin,
             CompositeCatPartBin<CatComplete> fullCatBin
     ) {
+        super(name);
+
         this.headBin = headBin;
         this.bodyBin = bodyBin;
         this.fullCatBin = fullCatBin;

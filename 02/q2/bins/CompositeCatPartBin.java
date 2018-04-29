@@ -36,9 +36,6 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
         long startTime = System.currentTimeMillis();
         long totalLockWaitTime = 0;
         synchronized(this) {
-            totalLockWaitTime += System.currentTimeMillis();
-
-            startTime = System.currentTimeMillis();
             while (contents.isEmpty()) {
                 try { wait(); }
                 catch(Exception e){ e.printStackTrace(); }
@@ -52,7 +49,7 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
         long startTime = System.currentTimeMillis();
         long totalLockWaitTime = 0;
         synchronized(this) {
-            totalLockWaitTime += System.currentTimeMillis();
+            totalLockWaitTime += System.currentTimeMillis() - startTime;
 
             contents.addLast(v);
             notify();
@@ -68,9 +65,6 @@ public class CompositeCatPartBin<V extends CompositeCatPart> {
         try { semaphore.acquire(); }
         catch(Exception e){ e.printStackTrace(); }
         try {
-            totalLockWaitTime += System.currentTimeMillis() - startTime;
-
-            startTime = System.currentTimeMillis();
             while (contents.isEmpty()) {
                 semaphore.release();
                 try { semaphore.acquire(); }

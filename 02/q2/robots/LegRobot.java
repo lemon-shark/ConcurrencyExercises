@@ -22,11 +22,14 @@ public class LegRobot extends Robot {
     private CompositeCatPartBin<ForeLeg> foreLegBin;
 
     public LegRobot(
+            String name,
             BaseCatPartBin<Leg> legBin,
             BaseCatPartBin<Toe> toeBin,
             CompositeCatPartBin<HindLeg> hindLegBin,
             CompositeCatPartBin<ForeLeg> foreLegBin
     ) {
+        super(name);
+
         this.legBin = legBin;
         this.toeBin = toeBin;
         this.hindLegBin = hindLegBin;
@@ -75,6 +78,7 @@ public class LegRobot extends Robot {
             lockWaitTime += toeAndTime2.getLockWaitTime();
             lockWaitTime += toeAndTime3.getLockWaitTime();
             lockWaitTime += toeAndTime4.getLockWaitTime();
+            lockWaitTime += toeAndTime5.getLockWaitTime();
 
             HindLeg hindLeg = new HindLeg();
             ArrayList<CatPart> catParts = new ArrayList<>();

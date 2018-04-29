@@ -10,6 +10,9 @@ public abstract class Robot extends Thread {
     protected final long workTimeMin = 0;
     protected final long workTimeMax = 0;
 
+    protected final String name;
+    public Robot(String name) { this.name = name; }
+
     @Override
     public void run() {
         while (shouldKeepRunning) {
@@ -37,4 +40,7 @@ public abstract class Robot extends Thread {
 
     public void turnOff()
     { this.shouldKeepRunning = false; }
+
+    public String getRobotName()
+    { return this.name; }
 }

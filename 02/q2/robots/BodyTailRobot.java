@@ -24,12 +24,15 @@ public class BodyTailRobot extends Robot {
     private CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin;
 
     public BodyTailRobot(
+            String name,
             BaseCatPartBin<Body> bodyBin,
             BaseCatPartBin<Tail> tailBin,
             CompositeCatPartBin<BodyWithLegs> bodyWithLegsBin,
             CompositeCatPartBin<BodyWithTail> bodyWithTailBin,
             CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin
     ) {
+        super(name);
+
         this.bodyBin = bodyBin;
         this.tailBin = tailBin;
         this.bodyWithLegsBin = bodyWithLegsBin;

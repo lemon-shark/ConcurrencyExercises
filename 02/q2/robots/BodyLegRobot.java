@@ -26,6 +26,7 @@ public class BodyLegRobot extends Robot {
     private CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin;
 
     public BodyLegRobot(
+            String name,
             BaseCatPartBin<Body> bodyBin,
             CompositeCatPartBin<BodyWithTail> bodyWithTailBin,
             CompositeCatPartBin<HindLeg> hindLegBin,
@@ -33,6 +34,8 @@ public class BodyLegRobot extends Robot {
             CompositeCatPartBin<BodyWithLegs> bodyWithLegsBin,
             CompositeCatPartBin<BodyWithLegsTail> bodyWithLegsTailBin
     ) {
+        super(name);
+
         this.bodyBin = bodyBin;
         this.bodyWithTailBin = bodyWithTailBin;
         this.hindLegBin = hindLegBin;

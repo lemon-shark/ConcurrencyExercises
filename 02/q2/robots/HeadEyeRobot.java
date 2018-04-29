@@ -24,12 +24,15 @@ public class HeadEyeRobot extends Robot {
     private CompositeCatPartBin<HeadWithEyesWhiskers> headWithEyesWhiskersBin;
 
     public HeadEyeRobot(
+            String name,
             BaseCatPartBin<Head> headBin,
             BaseCatPartBin<Eye> eyeBin,
             CompositeCatPartBin<HeadWithEyes> headWithEyesBin,
             CompositeCatPartBin<HeadWithWhiskers> headWithWhiskersBin,
             CompositeCatPartBin<HeadWithEyesWhiskers> headWithEyesWhiskersBin
     ) {
+        super(name);
+
         this.headBin = headBin;
         this.eyeBin = eyeBin;
         this.headWithEyesBin = headWithEyesBin;

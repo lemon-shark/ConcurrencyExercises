@@ -83,18 +83,21 @@ public class Main {
 
         /** Create All The Robots */
         LegRobot legRobot1 = new LegRobot(
+                "legRobot1",
                 legBin,
                 toeBin,
                 hindLegBin,
                 foreLegBin
         );
         LegRobot legRobot2 = new LegRobot(
+                "legRobot2",
                 legBin,
                 toeBin,
                 hindLegBin,
                 foreLegBin
         );
         BodyLegRobot bodyLegRobot1 = new BodyLegRobot(
+                "bodyLegRobot1",
                 bodyBin,
                 bodyWithTailBin,
                 hindLegBin,
@@ -103,6 +106,7 @@ public class Main {
                 bodyWithLegsTailBin
         );
         BodyLegRobot bodyLegRobot2 = new BodyLegRobot(
+                "bodyLegRobot2",
                 bodyBin,
                 bodyWithTailBin,
                 hindLegBin,
@@ -111,6 +115,7 @@ public class Main {
                 bodyWithLegsTailBin
         );
         BodyTailRobot bodyTailRobot1 = new BodyTailRobot(
+                "bodyTailRobot1",
                 bodyBin,
                 tailBin,
                 bodyWithLegsBin,
@@ -118,6 +123,7 @@ public class Main {
                 bodyWithLegsTailBin
         );
         BodyTailRobot bodyTailRobot2 = new BodyTailRobot(
+                "bodyTailRobot2",
                 bodyBin,
                 tailBin,
                 bodyWithLegsBin,
@@ -125,6 +131,7 @@ public class Main {
                 bodyWithLegsTailBin
         );
         HeadEyeRobot headEyeRobot1 = new HeadEyeRobot(
+                "headEyeRobot1",
                 headBin,
                 eyeBin,
                 headWithEyesBin,
@@ -132,6 +139,7 @@ public class Main {
                 headWithEyesWhiskersBin
         );
         HeadEyeRobot headEyeRobot2 = new HeadEyeRobot(
+                "headEyeRobot2",
                 headBin,
                 eyeBin,
                 headWithEyesBin,
@@ -139,6 +147,7 @@ public class Main {
                 headWithEyesWhiskersBin
         );
         HeadWhiskerRobot headWhiskerRobot1 = new HeadWhiskerRobot(
+                "headWhiskerRobot1",
                 headBin,
                 whiskerBin,
                 headWithEyesBin,
@@ -146,6 +155,7 @@ public class Main {
                 headWithEyesWhiskersBin
         );
         HeadWhiskerRobot headWhiskerRobot2 = new HeadWhiskerRobot(
+                "headWhiskerRobot2",
                 headBin,
                 whiskerBin,
                 headWithEyesBin,
@@ -154,6 +164,7 @@ public class Main {
         );
 
         CompleteCatRobot completeCatRobot = new CompleteCatRobot(
+                "CompleteCatRobot",
                 headWithEyesWhiskersBin,
                 bodyWithLegsTailBin,
                 catCompleteBin
@@ -188,25 +199,10 @@ public class Main {
             robot.turnOff();
 
         /** Output the results of the experiment */
-        String[] robotNames = new String[] {
-            "legRobot1",
-            "legRobot2",
-            "bodyLegRobot1",
-            "bodyLegRobot2",
-            "bodyTailRobot1",
-            "bodyTailRobot2",
-            "headEyeRobot1",
-            "headEyeRobot2",
-            "headWhiskerRobot1",
-            "headWhiskerRobot2",
-            "completeCatRobot"
-        };
-
         System.out.print("totalTime");
-        for (String robotName : robotNames)
-            System.out.print("," + robotName);
-
-        System.out.println();
+        for (Robot robot : robots)
+            System.out.print("," + robot.getRobotName());
+        System.out.println("," + completeCatRobot.getRobotName());
 
         System.out.print(endTime - startTime);
         for (Robot robot : robots)
