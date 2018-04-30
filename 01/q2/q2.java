@@ -8,12 +8,11 @@ import java.lang.System.*;
  * - There is a binary search tree whose data are doubles.
  * - There are two Traversal threads and one Modifier thread.
  * - The Traversal threads do an inorder traversal, recording their path in local strings. When they
- *   finish a traversal, they record a newline and wait 5-20ms and then restart.  They repeat this
+ *   finish a traversal, they record a newline and wait 5-20ms and then restart. They repeat this
  *   for 5 seconds.
- * - The Modifier thread randomly traverse a single branch of the tree.  Where applicable, it
- *   modifies nodes in the tree with predeterined probabilities.  if it modifies a node or reaches
- *   a leaf, it restarts after waiting 1-5ms.  It repeats for 5 seconds.  If it finishes before
- *   the other two threads, it joins on them.
+ * - The Modifier thread randomly traverses a single branch of the tree. Where applicable, it
+ *   modifies nodes in the tree with predetermined probabilities. If it modifies a node or reaches
+ *   a leaf, it restarts after waiting 1-5ms. It repeats for 5 seconds.
  * - When all is said and done, the Modifier thread prints the strings the other threads stored.
  *
  * In this implementation, the Modifier thread is the main thread.
