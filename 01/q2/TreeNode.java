@@ -10,4 +10,10 @@ public class TreeNode {
         this.leftChild = leftChild;
         this.rightChild = rightChild;
     }
+
+    // initialize null children
+    TreeNode(double data, TreeNode parent) {
+        this.data = data;
+        this.parent = parent;
+    }
 }

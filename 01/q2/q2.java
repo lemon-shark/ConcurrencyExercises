@@ -8,10 +8,8 @@ import java.lang.System.*;
  * - The Modifier thread randomly traverses a single branch of the tree starting from the root.
  *   Where applicable, it modifies nodes in the tree with predetermined probabilities. If it
  *   modifies a node or reaches a leaf, it restarts after waiting 1-5ms. It repeats for 5 seconds.
- * - After Traversal and Modifier threads are done, the string recorded by the traversal threads
+ * - After Traversal and Modifier threads are done, the strings recorded by the traversal threads
  *   are printed to stdout.
- *
- * In this implementation, the Modifier thread is the main thread.
  */
 public class q2 {
 
@@ -40,9 +38,17 @@ public class q2 {
         tm.join();
 
         /** print TreePrinters' Strings */
-        for (TreePrinter tp : tps)
-            System.out.println(tp.str + "\n");
+        System.out.println("A");
+        System.out.println(tps[0].str + "\n");
+        System.out.println("B");
+        System.out.println(tps[1].str);
 
+        /** print the tree is at is now to see if it's valid */
         //printTree(root);
+
+        /** check that Traversal Threads always traversed inorder, and binary tree stayed valid. */
+        //boolean firstTreePrinterIsGood  = Utils.isValidTraversalString(tps[0].str.toString());
+        //boolean secondTreePrinterIsGood = Utils.isValidTraversalString(tps[1].str.toString());
+        //System.out.println(firstTreePrinterIsGood && secondTreePrinterIsGood);
     }
 }

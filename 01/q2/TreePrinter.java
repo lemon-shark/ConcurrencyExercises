@@ -67,7 +67,7 @@ class TreePrinter extends Thread {
                 str.append("\n");
             }
 
-            try { Thread.sleep((long) Utils.randomDouble(5, 20)); }
+            try { Thread.sleep((long) Utils.randomDouble(5, 21)); }
             catch(Exception e) { e.printStackTrace(); }
         }
     }

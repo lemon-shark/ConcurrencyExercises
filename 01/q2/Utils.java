@@ -1,4 +1,5 @@
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 public class Utils {
     static final int fiveSecondsInMillis = 5000;
@@ -46,5 +47,18 @@ public class Utils {
 
         _printTree(tn.leftChild, depth+1, true); // always try left children before
         _printTree(tn.rightChild, depth+1, false); // right children
+    }
+
+    static boolean isValidTraversalString(String traversalString) {
+        for (String line : traversalString.split("\n")) {
+            Stream<Double> nums = Stream.of(line.split(" ")).map(Double::parseDouble);
+            double prev = 0.0;
+            for (double num : (Iterable<Double>)nums::iterator) {
+                if (num < prev)
+                    return false;
+                prev = num;
+            }
+        }
+        return true;
     }
 }
