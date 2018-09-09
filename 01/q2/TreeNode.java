@@ -1,4 +1,4 @@
-class TreeNode {
+public class TreeNode {
     protected volatile double data;
     protected volatile TreeNode parent;
     protected volatile TreeNode leftChild;
