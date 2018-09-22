@@ -1,4 +1,4 @@
-class TreeNode {
+public class TreeNode {
     protected volatile double data;
     protected volatile TreeNode parent;
     protected volatile TreeNode leftChild;
@@ -9,5 +9,11 @@ class TreeNode {
         this.parent = parent;
         this.leftChild = leftChild;
         this.rightChild = rightChild;
+    }
+
+    // initialize null children
+    TreeNode(double data, TreeNode parent) {
+        this.data = data;
+        this.parent = parent;
     }
 }
