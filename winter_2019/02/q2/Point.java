@@ -1,24 +1,24 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Point {
-    private float x, y;
+    private final double x, y;
 
-    public Point(float x, float y) {
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public float getX() {
+    public double getX() {
         return this.x;
     }
 
-    public float getY() {
+    public double getY() {
         return this.y;
     }
 
     public static Point createRandomPoint() {
-        float x = ThreadLocalRandom.current().nextFloat();
-        float y = ThreadLocalRandom.current().nextFloat();
+        double x = ThreadLocalRandom.current().nextDouble();
+        double y = ThreadLocalRandom.current().nextDouble();
 
         System.out.println(x + ", " + y);
 

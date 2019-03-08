@@ -1,12 +1,13 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Main {
     private static final String helpString = ""
         + "usage: java Main n t [r]"
-        + "  int n          : number of points (n > 3)"
-        + "  int t          : number of threads (t > 0)"
-        + "  optional int r : RNG seed";
+        + "  int n:            number of points (n > 3)"
+        + "  int t:            number of threads (t > 0)"
+        + "  int r (optional): RNG seed";
 
     private static int n, t;
     private static int r = 31;
@@ -15,6 +16,9 @@ public class Main {
         parseArgs(args);
 
         List<Point> points = generatePoints(n);
+
+        Map<Triangle, Integer> triangleOrdering =
+            DefaultTriangulator.buildTriangulation(points);
     }
 
     private static void parseArgs(String[] args) {
