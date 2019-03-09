@@ -1,5 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.Map;
 
 public class Main {
@@ -19,6 +21,9 @@ public class Main {
 
         Map<Triangle, Integer> triangleOrdering =
             DefaultTriangulator.buildTriangulation(points);
+
+        ArrayList<Triangle> triangles = triangleSet_to_triangleArrayList(triangleOrdering.keySet());
+        TriangulationDrawer.make(triangles, "default.png");
     }
 
     private static void parseArgs(String[] args) {
@@ -48,5 +53,15 @@ public class Main {
         }
 
         return points;
+    }
+
+    private static ArrayList<Triangle> triangleSet_to_triangleArrayList(Set<Triangle> triangleSet) {
+        ArrayList<Triangle> retval = new ArrayList<>();
+
+        for (Triangle t : triangleSet) {
+            retval.add(t);
+        }
+
+        return retval;
     }
 }
