@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class Main {
     private static final String helpString = ""
-        + "usage: java Main n t [r]"
-        + "  int n:            number of points (n > 3)"
-        + "  int t:            number of threads (t > 0)"
-        + "  int r (optional): RNG seed";
+        + "\nusage: java Main n t [r]"
+        + "\n  int n:            number of points (n > 3)"
+        + "\n  int t:            number of threads (t > 0)"
+        + "\n  int r (optional): RNG seed";
 
     private static int n, t;
     private static int r = 31;

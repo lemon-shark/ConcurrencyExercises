@@ -14,16 +14,20 @@ public class DefaultTriangulator {
     private static List<Edge> buildEdgeList(List<Point> points) {
         List<Edge> edges = new ArrayList<Edge>();
 
-        for (Point p1 : points) {
-            for (Point p2 : points) {
-                if (p1 == p2) {
-                    continue;
-                }
+        for (int i = 0; i < points.size(); i++) {
+            for (int j = i+1; j < points.size(); j++) {
+                Point p1 = points.get(i);
+                Point p2 = points.get(j);
 
                 Edge edge = new Edge(p1, p2);
 
                 boolean intersectionFound = false;
                 for (Edge other : edges) {
+                    Point p3 = other.p1;
+                    Point p4 = other.p2;
+                    if ((p1 == p3 || p1 == p4) || (p2 == p3 || p2 == p4)) {
+                        continue;
+                    }
                     if (edge.intersects(other)) {
                         intersectionFound = true;
                         break;
@@ -44,22 +48,22 @@ public class DefaultTriangulator {
         int triangleCount = 0;
 
         // add triangles without setting neighbours
-        for (Edge e1 : edges) {
-            for (Edge e2 : edges) {
-                for (Edge e3 : edges) {
-                    if (e1 == e2 || e1 == e3 || e2 == e3) {
-                        continue;
-                    }
+        for (int i = 0; i < edges.size(); i++) {
+            for (int j = i+1; j < edges.size(); j++) {
+                for (int k = j+1; k < edges.size(); k++) {
+                    Edge e1 = edges.get(i);
+                    Edge e2 = edges.get(j);
+                    Edge e3 = edges.get(k);
 
-                    HashSet<Point> edgeTips = new HashSet<Point>();
-                    edgeTips.add(e1.p1);
-                    edgeTips.add(e1.p2);
-                    edgeTips.add(e2.p1);
-                    edgeTips.add(e2.p2);
-                    edgeTips.add(e3.p1);
-                    edgeTips.add(e3.p2);
+                    HashSet<Point> edgePoints = new HashSet<Point>();
+                    edgePoints.add(e1.p1);
+                    edgePoints.add(e1.p2);
+                    edgePoints.add(e2.p1);
+                    edgePoints.add(e2.p2);
+                    edgePoints.add(e3.p1);
+                    edgePoints.add(e3.p2);
 
-                    if (edgeTips.size() == 3) {
+                    if (edgePoints.size() == 3) {
                         Triangle triangle = new Triangle(e1, e2, e3);
                         triangleOrdering.put(triangle, triangleCount++);
                     }

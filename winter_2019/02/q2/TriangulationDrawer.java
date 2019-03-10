@@ -11,6 +11,7 @@ import java.io.File;
 public class TriangulationDrawer {
     public static final int width = 800;
     public static final int height = 800;
+    public static final int vertexSize = 10;
 
     public static void make(List<Triangle> triangles, String filename) {
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -18,7 +19,7 @@ public class TriangulationDrawer {
         // all white background
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
-                img.setRGB(i,j,0);
+                img.setRGB(i,j,0xFFFFFFFF);
 
         // get ready to draw
         Graphics g = img.getGraphics();
@@ -34,8 +35,9 @@ public class TriangulationDrawer {
                 int y2 = (int)Math.round(e.p2.getY() * height);
 
                 g.drawLine(x1, y1, x2, y2);
-                g.fillOval(x1, y1, 6, 6);
-                g.fillOval(x2, y2, 6, 6);
+
+                g.fillOval(x1 - (vertexSize/2), y1 - (vertexSize/2), vertexSize, vertexSize);
+                g.fillOval(x2 - (vertexSize/2), y2 - (vertexSize/2), vertexSize, vertexSize);
             }
         }
 

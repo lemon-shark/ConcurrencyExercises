@@ -1,5 +1,6 @@
 public class Edge {
     public final Point p1, p2;
+
     public Edge(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
@@ -29,12 +30,12 @@ public class Edge {
         double y_intersect = a1 * x_intersect + b1;
 
         // return true if intersection is in bounds of both edges/line segments
-        boolean x_in_bounds = 
-            x_intersect >= x1_1 && x_intersect <= x2_1 &&
-            x_intersect >= x1_2 && x_intersect <= x2_2;
+        boolean x_in_bounds =
+            x_intersect > Math.max(Math.min(x1_1, x2_1), Math.min(x1_2, x2_2)) &&
+            x_intersect < Math.min(Math.max(x1_1, x2_1), Math.max(x1_2, x2_2));
         boolean y_in_bounds =
-            y_intersect >= y1_1 && y_intersect <= y2_1 &&
-            y_intersect >= y1_2 && y_intersect <= y2_2;
+            y_intersect > Math.max(Math.min(y1_1, y2_1), Math.min(y1_2, y2_2)) &&
+            y_intersect < Math.min(Math.max(y1_1, y2_1), Math.max(y1_2, y2_2));
 
         return x_in_bounds && y_in_bounds;
     }
