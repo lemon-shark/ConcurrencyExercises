@@ -21,20 +21,15 @@ public class DefaultTriangulator {
 
                 Edge edge = new Edge(p1, p2);
 
-                boolean intersectionFound = false;
-                for (Edge other : edges) {
-                    Point p3 = other.p1;
-                    Point p4 = other.p2;
-                    if ((p1 == p3 || p1 == p4) || (p2 == p3 || p2 == p4)) {
-                        continue;
-                    }
-                    if (edge.intersects(other)) {
-                        intersectionFound = true;
+                boolean cannotAddEdge = false;
+                for (Edge existing : edges) {
+                    if (edge.equals(existing) || edge.intersects(existing)) {
+                        cannotAddEdge = true;
                         break;
                     }
                 }
 
-                if (!intersectionFound) {
+                if (!cannotAddEdge) {
                     edges.add(edge);
                 }
             }

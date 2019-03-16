@@ -6,6 +6,29 @@ public class Edge {
         this.p2 = p2;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Edge)) {
+            return false;
+        }
+        Edge other = (Edge)o;
+        Point[] otherPoints = new Point[]{other.p1, other.p2};
+        Point[] thisPoints = new Point[]{this.p1, this.p2};
+
+        for (Point thisP : thisPoints) {
+            boolean found = false;
+            for (Point otherP : otherPoints) {
+                if (thisP == otherP) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean intersects(Edge other) {
         // get line equation for this edge
         double x1_1 = this.p1.getX();
