@@ -49,4 +49,39 @@ public class TriangulationDrawer {
             System.out.println("failed to write " + filename + " file");
         }
     }
+
+    public static void make2(List<Edge> edges, String filename) {
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        // all white background
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                img.setRGB(i,j,0xFFFFFFFF);
+
+        // get ready to draw
+        Graphics g = img.getGraphics();
+        g.setColor(Color.BLACK);
+
+        for (Edge e : edges) {
+            int x1 = (int)Math.round(e.p1.getX() * width);
+            int x2 = (int)Math.round(e.p2.getX() * width);
+            int y1 = (int)Math.round(e.p1.getY() * height);
+            int y2 = (int)Math.round(e.p2.getY() * height);
+
+            g.drawLine(x1, y1, x2, y2);
+
+            g.fillOval(x1 - (vertexSize/2), y1 - (vertexSize/2), vertexSize, vertexSize);
+            g.fillOval(x2 - (vertexSize/2), y2 - (vertexSize/2), vertexSize, vertexSize);
+
+            System.out.println("("+x1+","+y1+"),("+x2+","+y2+")\n");
+        }
+
+        File outputFile = new File(filename);
+        try {
+            ImageIO.write(img, "png", outputFile);
+        }
+        catch (Exception e) {
+            System.out.println("failed to write " + filename + " file");
+        }
+    }
 }

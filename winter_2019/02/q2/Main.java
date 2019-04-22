@@ -19,11 +19,9 @@ public class Main {
 
         List<Point> points = generatePoints(n);
 
-        Map<Triangle, Integer> triangleOrdering =
-            DefaultTriangulator.buildTriangulation(points);
+        List<Edge> edges = DefaultTriangulator.buildEdgeList(points);
 
-        ArrayList<Triangle> triangles = triangleSet_to_triangleArrayList(triangleOrdering.keySet());
-        TriangulationDrawer.make(triangles, "default.png");
+        TriangulationDrawer.make2(edges, "default2.png");
     }
 
     private static void parseArgs(String[] args) {
@@ -39,7 +37,19 @@ public class Main {
             if (args.length == 3) {
                 r = Integer.parseInt(args[2]);
             }
+
+            if (!(n > 3)) {
+                System.out.println("require n > 3");
+                System.out.println(helpString);
+                System.exit(1);
+            }
+            if (!(t > 0)) {
+                System.out.println("require t > 0");
+                System.out.println(helpString);
+                System.exit(1);
+            }
         } catch (Exception e) {
+            System.out.println(e);
             System.out.println(helpString);
             System.exit(1);
         }

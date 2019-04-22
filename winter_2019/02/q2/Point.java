@@ -16,11 +16,13 @@ public class Point {
         return this.y;
     }
 
+    public boolean equals(Point other) {
+        return this.x == other.getX() && this.y == other.getY();
+    }
+
     public static Point createRandomPoint() {
         double x = ThreadLocalRandom.current().nextDouble();
         double y = ThreadLocalRandom.current().nextDouble();
-
-        System.out.println(x + ", " + y);
 
         return new Point(x, y);
     }

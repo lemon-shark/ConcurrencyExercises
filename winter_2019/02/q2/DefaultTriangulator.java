@@ -11,13 +11,13 @@ public class DefaultTriangulator {
         return buildTriangulationFromEdgeList(edges);
     }
 
-    private static List<Edge> buildEdgeList(List<Point> points) {
+    public static List<Edge> buildEdgeList(List<Point> points) {
         List<Edge> edges = new ArrayList<Edge>();
 
-        for (int i = 0; i < points.size(); i++) {
-            for (int j = i+1; j < points.size(); j++) {
-                Point p1 = points.get(i);
-                Point p2 = points.get(j);
+
+        for (Point p1 : points) {
+            for (Point p2: points) {
+                if (p1 == p2) continue;
 
                 Edge edge = new Edge(p1, p2);
 
