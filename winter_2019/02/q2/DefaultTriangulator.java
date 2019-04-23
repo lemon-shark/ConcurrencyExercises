@@ -11,7 +11,7 @@ public class DefaultTriangulator {
         return buildTriangulationFromEdgeList(edges);
     }
 
-    public static List<Edge> buildEdgeList(List<Point> points) {
+    private static List<Edge> buildEdgeList(List<Point> points) {
         List<Edge> edges = new ArrayList<Edge>();
 
 

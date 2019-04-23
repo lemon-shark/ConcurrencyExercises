@@ -54,7 +54,6 @@ public class Edge {
         // get intersection point
         double x_intersect = (b2 - b1) / (a1 - a2);
         double y_intersect = a1 * x_intersect + b1;
-        System.out.println("intersect("+x_intersect+","+y_intersect+")");
 
         // return true if intersection is in bounds of both edges/line segments
         boolean in_bounds_1 =

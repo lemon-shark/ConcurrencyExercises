@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Polygon;
 
-import java.util.List;
+import java.util.Collection;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ public class TriangulationDrawer {
     public static final int height = 800;
     public static final int vertexSize = 10;
 
-    public static void make(List<Triangle> triangles, String filename) {
+    public static void make(Collection<Triangle> triangles, String filename) {
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         // all white background
@@ -50,7 +50,7 @@ public class TriangulationDrawer {
         }
     }
 
-    public static void make2(List<Edge> edges, String filename) {
+    public static void make2(Collection<Edge> edges, String filename) {
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         // all white background
@@ -72,8 +72,6 @@ public class TriangulationDrawer {
 
             g.fillOval(x1 - (vertexSize/2), y1 - (vertexSize/2), vertexSize, vertexSize);
             g.fillOval(x2 - (vertexSize/2), y2 - (vertexSize/2), vertexSize, vertexSize);
-
-            System.out.println("("+x1+","+y1+"),("+x2+","+y2+")\n");
         }
 
         File outputFile = new File(filename);

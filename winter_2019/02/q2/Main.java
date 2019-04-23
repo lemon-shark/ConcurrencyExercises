@@ -19,9 +19,9 @@ public class Main {
 
         List<Point> points = generatePoints(n);
 
-        List<Edge> edges = DefaultTriangulator.buildEdgeList(points);
+        Map<Triangle, Integer> triangleOrdering = DefaultTriangulator.buildTriangulation(points);
 
-        TriangulationDrawer.make2(edges, "default2.png");
+        TriangulationDrawer.make(triangleOrdering.keySet(), "default.png");
     }
 
     private static void parseArgs(String[] args) {
