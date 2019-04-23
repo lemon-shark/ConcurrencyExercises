@@ -22,6 +22,10 @@ public class Main {
         Map<Triangle, Integer> triangleOrdering = DefaultTriangulator.buildTriangulation(points);
 
         TriangulationDrawer.make(triangleOrdering.keySet(), "default.png");
+
+        DelaunayTriangulator.doDelaunayTriangulation(triangleOrdering);
+
+        // TriangulationDrawer.make(triangleOrdering.keySet(), "delaunay.png");
     }
 
     private static void parseArgs(String[] args) {
@@ -63,15 +67,5 @@ public class Main {
         }
 
         return points;
-    }
-
-    private static ArrayList<Triangle> triangleSet_to_triangleArrayList(Set<Triangle> triangleSet) {
-        ArrayList<Triangle> retval = new ArrayList<>();
-
-        for (Triangle t : triangleSet) {
-            retval.add(t);
-        }
-
-        return retval;
     }
 }
