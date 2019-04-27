@@ -1,4 +1,4 @@
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class Point {
     private final double x, y;
@@ -18,12 +18,5 @@ public class Point {
 
     public boolean equals(Point other) {
         return this.x == other.getX() && this.y == other.getY();
-    }
-
-    public static Point createRandomPoint() {
-        double x = ThreadLocalRandom.current().nextDouble();
-        double y = ThreadLocalRandom.current().nextDouble();
-
-        return new Point(x, y);
     }
 }

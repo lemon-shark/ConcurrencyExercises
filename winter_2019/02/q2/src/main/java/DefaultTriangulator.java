@@ -74,30 +74,33 @@ public class DefaultTriangulator {
             edgeToTriangle.put(t.e3, t);
         }
         for (Triangle t : triangleOrdering.keySet()) {
-            Edge[] t_edges = new Edge[] {t.e1, t.e2, t.e3};
-            for (int i = 0; i < t_edges.length; i++) {
-                Triangle t_other = edgeToTriangle.get(t_edges[i]);
-                if (t != t_other) {
+            Edge[] tEdges = new Edge[] {t.e1, t.e2, t.e3};
+            for (int i = 0; i < tEdges.length; i++) {
+                Triangle tOther = edgeToTriangle.get(tEdges[i]);
+                if (t != tOther) {
                     switch (i) {
                         case 0:
-                            t.nt1 = t_other;
+                            t.nt1 = tOther;
                             break;
                         case 1:
-                            t.nt2 = t_other;
+                            t.nt2 = tOther;
                             break;
                         case 2:
-                            t.nt3 = t_other;
+                            t.nt3 = tOther;
                             break;
                     }
 
-                    Edge[] t_other_edges = new Edge[] {t_other.e1, t_other.e2, t_other.e3};
-                    for (int j = 0; j < t_other_edges.length; j++) {
-                        if (t_other_edges[0] == t_edges[i]) {
-                            t_other.nt1 = t;
-                        } else if (t_other_edges[1] == t_edges[i]) {
-                            t_other.nt2 = t;
-                        } else if (t_other_edges[2] == t_edges[i]) {
-                            t_other.nt3 = t;
+                    Edge[] tOtherEdges = new Edge[] {tOther.e1, tOther.e2, tOther.e3};
+                    for (int j = 0; j < tOtherEdges.length; j++) {
+                        if (tOtherEdges[0] == tEdges[i]) {
+                            tOther.nt1 = t;
+                            break;
+                        } else if (tOtherEdges[1] == tEdges[i]) {
+                            tOther.nt2 = t;
+                            break;
+                        } else if (tOtherEdges[2] == tEdges[i]) {
+                            tOther.nt3 = t;
+                            break;
                         }
                     }
                 }

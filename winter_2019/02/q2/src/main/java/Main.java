@@ -1,3 +1,5 @@
+import java.util.Random;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,9 +14,10 @@ public class Main {
         + "\n  int r (optional): RNG seed";
 
     private static int n, t;
-    private static int r = 31;
+    private static long r = 31;
+    private static Random random;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         parseArgs(args);
 
         List<Point> points = generatePoints(n);
@@ -23,7 +26,7 @@ public class Main {
 
         TriangulationDrawer.make(triangleOrdering.keySet(), "default.png");
 
-        DelaunayTriangulator.doDelaunayTriangulation(triangleOrdering);
+        new DelaunayTriangulator().doDelaunayTriangulation(triangleOrdering, t);
 
         // TriangulationDrawer.make(triangleOrdering.keySet(), "delaunay.png");
     }
@@ -39,7 +42,8 @@ public class Main {
             t = Integer.parseInt(args[1]);
 
             if (args.length == 3) {
-                r = Integer.parseInt(args[2]);
+                r = Long.parseLong(args[2]);
+                random = new Random(r);
             }
 
             if (!(n > 3)) {
@@ -63,7 +67,9 @@ public class Main {
         List<Point> points = new ArrayList<Point>();
 
         for (int i = 0; i < n; i++) {
-            points.add(Point.createRandomPoint());
+            double x = random.nextDouble();
+            double y = random.nextDouble();
+            points.add(new Point(x, y));
         }
 
         return points;
