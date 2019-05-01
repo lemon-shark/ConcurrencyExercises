@@ -37,8 +37,12 @@ public class Edge {
      * are also not considered to be intersecting.
      */
     public boolean intersects(Edge other) {
-        if (this.p1.equals(other.p1) || this.p1.equals(other.p2) ||
-            this.p2.equals(other.p1) || this.p2.equals(other.p2)) {
+        return intersects(other.p1, other.p2);
+    }
+
+    public boolean intersects(Point other1, Point other2) {
+        if (this.p1.equals(other1) || this.p1.equals(other2) ||
+            this.p2.equals(other1) || this.p2.equals(other2)) {
                 return false;
         }
 
@@ -52,10 +56,10 @@ public class Edge {
         double b1 = y1_1 - a1 * x1_1;
 
         // get line equation for other edge
-        double x1_2 = other.p1.getX();
-        double x2_2 = other.p2.getX();
-        double y1_2 = other.p1.getY();
-        double y2_2 = other.p2.getY();
+        double x1_2 = other1.getX();
+        double x2_2 = other2.getX();
+        double y1_2 = other1.getY();
+        double y2_2 = other2.getY();
 
         double a2 = (y2_2 - y1_2) / (x2_2 - x1_2);
         double b2 = y1_2 - a2 * x1_2;
@@ -77,6 +81,7 @@ public class Edge {
             y_intersect < Math.max(y1_2,y2_2);
 
         return in_bounds_1 && in_bounds_2;
+
     }
 
     public double innerAngleWith(Edge other) {

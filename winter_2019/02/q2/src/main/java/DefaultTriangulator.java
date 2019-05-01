@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Collection;
+import java.util.Arrays;
 
 public class DefaultTriangulator {
     public static Map<Triangle, Integer> buildTriangulation(List<Point> points) {
@@ -21,18 +22,16 @@ public class DefaultTriangulator {
                 Point p2 = points.get(j);
                 if (p1 == p2) continue;
 
-                Edge edge = new Edge(p1, p2);
-
                 boolean cannotAddEdge = false;
                 for (Edge existing : edges) {
-                    if (edge.equals(existing) || edge.intersects(existing)) {
+                    if (existing.intersects(p1, p2)) {
                         cannotAddEdge = true;
                         break;
                     }
                 }
 
                 if (!cannotAddEdge) {
-                    edges.add(edge);
+                    edges.add(new Edge(p1, p2));
                 }
             }
         }
@@ -43,7 +42,7 @@ public class DefaultTriangulator {
     private static Map<Triangle, Integer> buildTriangulation(List<Edge> edges, List<Point> points) {
         Map<Triangle, Integer> triangleOrdering = new HashMap<Triangle, Integer>();
 
-        // add triangles without setting neighbours
+        // create triangles without setting neighbours
         for (int i = 0; i < edges.size(); i++) {
             for (int j = i+1; j < edges.size(); j++) {
                 for (int k = j+1; k < edges.size(); k++) {
@@ -51,23 +50,16 @@ public class DefaultTriangulator {
                     Edge e2 = edges.get(j);
                     Edge e3 = edges.get(k);
 
-                    HashSet<Point> edgePoints = new HashSet<Point>();
-                    edgePoints.add(e1.p1);
-                    edgePoints.add(e1.p2);
-                    edgePoints.add(e2.p1);
-                    edgePoints.add(e2.p2);
-                    edgePoints.add(e3.p1);
-                    edgePoints.add(e3.p2);
+                    HashSet<Point> triPoints = new HashSet<Point>(Arrays.asList(new Point[] {
+                        e1.p1, e1.p2,
+                        e2.p1, e2.p2,
+                        e3.p1, e3.p2
+                    }));
 
-                    if (edgePoints.size() != 3)
+                    if (triPoints.size() != 3)
                         continue;
-
                     Point[] ps = new Point[3];
-                    int p_i = 0;
-                    for (Point p : edgePoints) {
-                        ps[p_i] = p;
-                        p_i++;
-                    }
+                    triPoints.toArray(ps);
 
                     if (noneWithin(points, ps[0], ps[1], ps[2])) {
                         Triangle triangle = new Triangle(e1, e2, e3);
@@ -76,10 +68,6 @@ public class DefaultTriangulator {
                 }
             }
         }
-
-        System.out.println("----------------------------------------triangles made----------------------------------------------");
-        for (Triangle t : triangleOrdering.keySet())
-            System.out.println(t);
 
         // add neighbours to triangles
         HashMap<Edge, Triangle> edgeToTriangle = new HashMap<Edge, Triangle>();
@@ -93,38 +81,22 @@ public class DefaultTriangulator {
             for (int i = 0; i < tEdges.length; i++) {
                 Triangle tOther = edgeToTriangle.get(tEdges[i]);
                 if (t != tOther) {
-                    switch (i) {
-                        case 0:
-                            t.nt1 = tOther;
-                            break;
-                        case 1:
-                            t.nt2 = tOther;
-                            break;
-                        case 2:
-                            t.nt3 = tOther;
-                            break;
-                    }
+                    if (i == 0)
+                        t.nt1 = tOther;
+                    else if (i == 1)
+                        t.nt2 = tOther;
+                    else if (i == 2)
+                        t.nt3 = tOther;
 
-                    Edge[] tOtherEdges = new Edge[] {tOther.e1, tOther.e2, tOther.e3};
-                    for (int j = 0; j < tOtherEdges.length; j++) {
-                        if (tOtherEdges[0] == tEdges[i]) {
-                            tOther.nt1 = t;
-                            break;
-                        } else if (tOtherEdges[1] == tEdges[i]) {
-                            tOther.nt2 = t;
-                            break;
-                        } else if (tOtherEdges[2] == tEdges[i]) {
-                            tOther.nt3 = t;
-                            break;
-                        }
-                    }
+                    if (tOther.e1 == tEdges[i])
+                        tOther.nt1 = t;
+                    else if (tOther.e2 == tEdges[i])
+                        tOther.nt2 = t;
+                    else if (tOther.e3 == tEdges[i])
+                        tOther.nt2 = t;
                 }
             }
         }
-
-        System.out.println("----------------------------------------neighbours added----------------------------------------------");
-        for (Triangle t : triangleOrdering.keySet())
-            System.out.println(t);
 
         return triangleOrdering;
     }
@@ -165,9 +137,9 @@ public class DefaultTriangulator {
             double c = det - a - b;
             if (c < minD || c > maxD)
                 continue;
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }
