@@ -1,8 +1,10 @@
-import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.Font;
 
 import java.util.Collection;
 
@@ -23,7 +25,7 @@ public class TriangulationDrawer {
 
         // get ready to draw
         Graphics g = img.getGraphics();
-        g.setColor(Color.BLACK);
+        g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
 
         // draw triangles
         for (Triangle t : triangles) {
@@ -34,10 +36,17 @@ public class TriangulationDrawer {
                 int y1 = (int)Math.round(e.p1.getY() * height);
                 int y2 = (int)Math.round(e.p2.getY() * height);
 
+                g.setColor(Color.BLACK);
+
                 g.drawLine(x1, y1, x2, y2);
 
                 g.fillOval(x1 - (vertexSize/2), y1 - (vertexSize/2), vertexSize, vertexSize);
                 g.fillOval(x2 - (vertexSize/2), y2 - (vertexSize/2), vertexSize, vertexSize);
+
+                g.setColor(Color.BLUE);
+
+                g.drawString(String.valueOf(e.p1.id), x1, y1);
+                g.drawString(String.valueOf(e.p2.id), x2, y2);
             }
         }
 

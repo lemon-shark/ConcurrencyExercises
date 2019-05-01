@@ -1,7 +1,13 @@
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Edge {
+    private static final AtomicLong NEXT_ID = new AtomicLong(0);
+
     public final Point p1, p2;
+    public final long id;
 
     public Edge(Point p1, Point p2) {
+        this.id = NEXT_ID.getAndIncrement();
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -13,11 +19,14 @@ public class Edge {
         }
 
         Edge other = (Edge)o;
+        return this.id == other.id;
+    }
 
-        boolean same1 = this.p1 == other.p1 && this.p2 == other.p2;
-        boolean same2 = this.p1 == other.p2 && this.p2 == other.p1;
-
-        return same1 || same2;
+    public String toString() {
+        return "Edge_"+this.id+"{"+
+            "\n\t\t"+p1.toString()+","+
+            "\n\t\t"+p2.toString()+","+
+        "}";
     }
 
     /**
@@ -70,10 +79,8 @@ public class Edge {
         return in_bounds_1 && in_bounds_2;
     }
 
-    public double innerAngleWith(Edge other) throws Exception {
+    public double innerAngleWith(Edge other) {
         Point sharedPoint = getSharedPoint(other);
-        if (sharedPoint == null)
-            throw new Exception("this Edge does not share a point with other Edge");
 
         Point pThis = this.p1 != sharedPoint? this.p1: this.p2;
         Point pOther = other.p1 != sharedPoint? other.p1: other.p2;
@@ -90,6 +97,10 @@ public class Edge {
         double cos = dotProd / (mag1 * mag2);
 
         return Math.acos(cos);
+    }
+
+    public boolean containsPoint(Point p) {
+        return this.p1 == p || this.p2 == p;
     }
 
     private Point getSharedPoint(Edge other) {

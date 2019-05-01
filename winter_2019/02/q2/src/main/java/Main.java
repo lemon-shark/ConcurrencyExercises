@@ -28,7 +28,7 @@ public class Main {
 
         new DelaunayTriangulator().doDelaunayTriangulation(triangleOrdering, t);
 
-        // TriangulationDrawer.make(triangleOrdering.keySet(), "delaunay.png");
+        TriangulationDrawer.make(triangleOrdering.keySet(), "delaunay.png");
     }
 
     private static void parseArgs(String[] args) {
@@ -43,8 +43,8 @@ public class Main {
 
             if (args.length == 3) {
                 r = Long.parseLong(args[2]);
-                random = new Random(r);
             }
+            random = new Random(r);
 
             if (!(n > 3)) {
                 System.out.println("require n > 3");
